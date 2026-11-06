@@ -11,7 +11,7 @@ export interface CityData {
 
 let promise: Promise<CityData | null> | null = null;
 export function loadCity(): Promise<CityData | null> {
-  promise ??= fetch('/geo/city.json')
+  promise ??= fetch(`${import.meta.env.BASE_URL}geo/city.json`)
     .then((r) => (r.ok ? (r.json() as Promise<CityData>) : null))
     .catch(() => null);
   return promise;
