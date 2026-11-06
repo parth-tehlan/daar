@@ -185,7 +185,12 @@ function scoreProject(p: Project, a: Answers): Match {
         : `Promised ${p.handoverPromised}. ${short}'s ${delay}-month average slip puts it in ${estQ}${margin >= 0 ? `, inside your ${quarterLabel(a.handoverBy)} window.` : `, past your ${quarterLabel(a.handoverBy)} window.`}`;
     reasons.push({ because: `You want keys by ${quarterLabel(a.handoverBy)}`, finding });
   }
-  if (reasons.length < 4 && budget === 1) {
+  if (reasons.length < 4 && unit.priceAED < a.budget[0]) {
+    reasons.push({
+      because: `Your budget is ${aedShort(a.budget[0], 1)}–${aedShort(a.budget[1], 1).replace('AED ', '')}`,
+      finding: `${aedShort(unit.priceAED)}, under your range, leaving room for a larger unit`,
+    });
+  } else if (reasons.length < 4 && budget === 1) {
     reasons.push({
       because: `Your budget is ${aedShort(a.budget[0], 1)}–${aedShort(a.budget[1], 1).replace('AED ', '')}`,
       finding: `${unit.kind === 'office' ? 'An office' : unit.kind === 'studio' ? 'A studio' : `A ${unit.kind} bed`} here is ${aedShort(unit.priceAED)}, inside it`,
@@ -218,11 +223,22 @@ export function scoreOne(id: string, a: Answers): Match | undefined {
   return p ? scoreProject(p, a) : undefined;
 }
 
+/** With areas chosen, only projects in them are matches; if that is thin, the best of the rest follow as `outside`. */
+export function matchGroups(a: Answers): { primary: Match[]; outside: Match[] } {
+  const all = PROJECTS.map((p) => scoreProject(p, a)).sort((x, y) => y.score - x.score);
+  if (a.areas.length === 0) return { primary: all.filter((m) => m.score >= 40).slice(0, 10), outside: [] };
+  const primary = all.filter((m) => a.areas.includes(m.project.district)).slice(0, 10);
+  const floor = primary.length ? primary[primary.length - 1].score - 1 : 100;
+  const outside =
+    primary.length < 5
+      ? all.filter((m) => !a.areas.includes(m.project.district) && m.score >= 30).slice(0, Math.min(5, 9 - primary.length)).map((m) => ({ ...m, score: Math.min(m.score, floor) }))
+      : [];
+  return { primary, outside };
+}
+
 export function matchProjects(a: Answers): Match[] {
-  return PROJECTS.map((p) => scoreProject(p, a))
-    .filter((m) => m.score >= 40)
-    .sort((x, y) => y.score - x.score)
-    .slice(0, 10);
+  const g = matchGroups(a);
+  return [...g.primary, ...g.outside];
 }
 
 /** deterministic size of Dubai's whole matching off-plan stock */
@@ -292,7 +308,8 @@ export function previewReasons(ms: Match[], a: Answers): Map<string, string> {
     }
     if (best) {
       used.set(best.kind, (used.get(best.kind) ?? 0) + 1);
-      out.set(m.project.id, best.text);
+      const outside = a.areas.length > 0 && !a.areas.includes(m.project.district);
+      out.set(m.project.id, outside ? `In ${SHORT[m.project.district]}, outside your areas. ${best.text}` : best.text);
     }
   });
   return out;

@@ -39,7 +39,7 @@ export function LabelProjector({ labelsRef, layerRef, viewRef }: {
   useFrame(() => {
     const layer = layerRef.current;
     if (!layer) return;
-    const k = Math.min(12, Math.max(1, viewRef.current.dist / 3000));
+    const k = Math.min(14, Math.max(1, viewRef.current.dist / 2500));
     const list = labelsRef.current;
     const kids = layer.children;
     for (let i = 0; i < kids.length; i++) {

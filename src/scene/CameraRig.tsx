@@ -4,6 +4,7 @@ import { Fog, PerspectiveCamera } from 'three';
 import type { MutableRefObject } from 'react';
 import { deg, viewOffsetX } from './shots';
 import type { Interaction, Shot, ViewState } from './shots';
+import type { Fade } from './fade';
 
 const FLY_MS = 1400;
 const ease = (k: number) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
@@ -13,9 +14,10 @@ interface Props {
   shot: Shot;
   viewRef: MutableRefObject<ViewState>;
   interact: MutableRefObject<Interaction>;
+  fade: Fade;
 }
 
-export function CameraRig({ shot, viewRef, interact }: Props) {
+export function CameraRig({ shot, viewRef, interact, fade }: Props) {
   const { camera, gl, scene, size } = useThree();
   const cam = camera as PerspectiveCamera;
   const st = useRef({
@@ -47,7 +49,7 @@ export function CameraRig({ shot, viewRef, interact }: Props) {
     s.fromOff = s.off;
     s.t = 0;
     s.tween = true;
-  }, [shot.mode, shot.offFrac, shot.tx, shot.tz, shot.dist, shot.az, shot.polar]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shot.mode, shot.offFrac, shot.tx, shot.tz, shot.ty, shot.dist, shot.az, shot.polar, shot.rad]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Pointer drag + wheel
   useEffect(() => {
@@ -119,6 +121,8 @@ export function CameraRig({ shot, viewRef, interact }: Props) {
       s.cur.tz = s.from.tz + (sh.tz - s.from.tz) * e;
       s.cur.az = s.from.az + da * e;
       s.cur.polar = s.from.polar + (sh.polar - s.from.polar) * e;
+      s.cur.ty = s.from.ty + (sh.ty - s.from.ty) * e;
+      s.cur.rad = Math.exp(Math.log(s.from.rad) + (Math.log(sh.rad) - Math.log(s.from.rad)) * e);
       s.cur.dist = Math.exp(Math.log(s.from.dist) + (Math.log(sh.dist) - Math.log(s.from.dist)) * e);
       s.off = s.fromOff + (offT - s.fromOff) * e;
       if (k >= 1) s.tween = false;
@@ -131,8 +135,8 @@ export function CameraRig({ shot, viewRef, interact }: Props) {
     const c = s.cur;
     const a = c.az * deg;
     const p = c.polar * deg;
-    cam.position.set(c.tx + c.dist * Math.sin(p) * Math.sin(a), c.dist * Math.cos(p), c.tz + c.dist * Math.sin(p) * Math.cos(a));
-    cam.lookAt(c.tx, 0, c.tz);
+    cam.position.set(c.tx + c.dist * Math.sin(p) * Math.sin(a), c.ty + c.dist * Math.cos(p), c.tz + c.dist * Math.sin(p) * Math.cos(a));
+    cam.lookAt(c.tx, c.ty, c.tz);
     const near = Math.max(5, c.dist * 0.04);
     const far = c.dist * 3 + 6000;
     const key = `${w}|${h}|${s.off.toFixed(1)}|${near.toFixed(0)}|${far.toFixed(0)}`;
@@ -148,7 +152,9 @@ export function CameraRig({ shot, viewRef, interact }: Props) {
       fog.near = c.dist * (detail ? 0.7 : 0.55);
       fog.far = c.dist * (detail ? 3.2 : 1.9);
     }
-    viewRef.current = { tx: c.tx, tz: c.tz, dist: c.dist, az: c.az, polar: c.polar };
+    fade.uFocus.value.set(c.tx, c.tz);
+    fade.uRadius.value = c.rad;
+    viewRef.current = { ...c };
   });
 
   return null;

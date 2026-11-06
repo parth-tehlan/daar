@@ -6,7 +6,7 @@ export interface CityData {
   coast: number[][];
   water: number[][];
   /** each building: [height, x0, z0, x1, z1, ...] */
-  districts: Record<string, { b: number[][] }>;
+  districts: Record<string, { b: number[][]; p?: number[][] }>;
 }
 
 let promise: Promise<CityData | null> | null = null;

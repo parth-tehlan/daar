@@ -56,12 +56,14 @@ export function ProjectTower({ project: p, palette }: { project: Project; palett
     dash: new LineDashedMaterial({ color: palette.accent, dashSize: 6, gapSize: 4, fog: true }),
     floors: new LineBasicMaterial({ color: palette.accent, transparent: true, opacity: 0.35, fog: true }),
     lead: new LineBasicMaterial({ color: palette.accent, fog: true }),
+    ghost: new LineDashedMaterial({ color: palette.accent, dashSize: 6, gapSize: 4, transparent: true, opacity: 0.3, depthTest: false, depthWrite: false }),
   }), []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     mats.fill.color.set(palette.ink);
     mats.dash.color.set(palette.accent);
     mats.floors.color.set(palette.accent);
     mats.lead.color.set(palette.accent);
+    mats.ghost.color.set(palette.accent);
   }, [palette, mats]);
   useEffect(() => () => Object.values(mats).forEach((m) => m.dispose()), [mats]);
 
@@ -78,6 +80,7 @@ export function ProjectTower({ project: p, palette }: { project: Project; palett
       <group rotation={[0, theta, 0]}>
         <mesh geometry={data.fill} material={mats.fill} raycast={noRaycast} renderOrder={3} />
         <primitive object={dashed} renderOrder={4} raycast={noRaycast} />
+        <lineSegments geometry={data.edges} material={mats.ghost} renderOrder={6} raycast={noRaycast} />
         <lineSegments geometry={data.floors} material={mats.floors} renderOrder={4} raycast={noRaycast} />
       </group>
       <lineSegments geometry={data.lead} material={mats.lead} renderOrder={4} raycast={noRaycast} />

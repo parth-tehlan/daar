@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from 'react';
-import { DoubleSide, LineBasicMaterial, MeshBasicMaterial } from 'three';
+import { DoubleSide, MeshBasicMaterial } from 'three';
+import { fadeLineMaterial } from './fade';
+import type { Fade } from './fade';
 import { buildBuildings, buildPolylines } from './buildCity';
 import type { HideRect } from './buildCity';
 import type { CityData } from './geo';
@@ -16,14 +18,15 @@ interface Props {
   focus: DistrictId[];
   hide: HideRect | null;
   hideDistrict: string | null;
+  fade: Fade;
 }
 
-function District({ id, list, palette, opacity, fillMat, hide }: {
-  id: string; list: number[][]; palette: Palette; opacity: number; fillMat: MeshBasicMaterial; hide: HideRect | null;
+function District({ id, list, parts, palette, opacity, fillMat, hide, fade }: {
+  id: string; list: number[][]; parts: number[][]; fade: Fade; palette: Palette; opacity: number; fillMat: MeshBasicMaterial; hide: HideRect | null;
 }) {
-  const geo = useMemo(() => buildBuildings(list, hide), [list, hide]);
+  const geo = useMemo(() => buildBuildings(list, parts, hide), [list, parts, hide]);
   const lineMat = useMemo(
-    () => new LineBasicMaterial({ color: palette.line, transparent: true, opacity, fog: true, depthWrite: false }),
+    () => fadeLineMaterial(fade, { color: palette.line, opacity }),
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
   useEffect(() => { lineMat.color.set(palette.line); }, [lineMat, palette.line]);
@@ -38,7 +41,7 @@ function District({ id, list, palette, opacity, fillMat, hide }: {
   );
 }
 
-export function CityLayers({ city, palette, mode, focus, hide, hideDistrict }: Props) {
+export function CityLayers({ city, palette, mode, focus, hide, hideDistrict, fade }: Props) {
   const fillMat = useMemo(
     () => new MeshBasicMaterial({
       color: palette.ink, side: DoubleSide, fog: true,
@@ -46,13 +49,13 @@ export function CityLayers({ city, palette, mode, focus, hide, hideDistrict }: P
     }),
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const roadMat = useMemo(() => new LineBasicMaterial({ color: palette.line, transparent: true, opacity: 0.22, fog: true, depthWrite: false }), []); // eslint-disable-line react-hooks/exhaustive-deps
-  const edgeMat = useMemo(() => new LineBasicMaterial({ color: palette.line, transparent: true, opacity: 0.55, fog: true, depthWrite: false }), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const roadMat = useMemo(() => fadeLineMaterial(fade, { color: palette.line, opacity: 0.22 }, 2.2), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const edgeMat = useMemo(() => fadeLineMaterial(fade, { color: palette.line, opacity: 0.55 }, 2.2), []); // eslint-disable-line react-hooks/exhaustive-deps
   const geos = useMemo(
     () => ({ roads: buildPolylines(city.roads, 0.5), coast: buildPolylines(city.coast, 0.5), water: buildPolylines(city.water, 0.5) }),
     [city],
   );
-  const k = mode === 'onboarding' ? 0.7 : 1;
+  const k = mode === 'onboarding' ? 0.7 : mode === 'detail' ? 0.75 : 0.8;
   useEffect(() => {
     fillMat.color.set(palette.ink);
     roadMat.color.set(palette.line);
@@ -73,6 +76,8 @@ export function CityLayers({ city, palette, mode, focus, hide, hideDistrict }: P
           key={id}
           id={id}
           list={d.b}
+          parts={d.p ?? []}
+          fade={fade}
           palette={palette}
           fillMat={fillMat}
           hide={hideDistrict === id ? hide : null}

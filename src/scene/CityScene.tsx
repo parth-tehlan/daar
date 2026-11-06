@@ -12,7 +12,9 @@ import { ProjectTower, LEADER_M } from './ProjectTower';
 import { SceneOverlay } from './SceneOverlay';
 import { FIXTURE_PROJECTS } from './devFixture';
 import { useCity } from './geo';
-import { computeShot, DISTRICT_POS } from './shots';
+import { createFade } from './fade';
+import type { Fade } from './fade';
+import { computeShot, DISTRICT_POS, pickAzimuth } from './shots';
 import type { Interaction, ViewState } from './shots';
 import { usePalette } from './theme';
 import type { HideRect } from './buildCity';
@@ -30,19 +32,20 @@ function useEffective(props: SceneProps): SceneProps {
   return props;
 }
 
-function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewState>; labelsRef: React.MutableRefObject<LabelSpec[]>; layerRef: React.RefObject<HTMLDivElement | null>; onLabels: (l: LabelSpec[]) => void; interact: React.MutableRefObject<Interaction> }) {
-  const { mode, step, focusDistricts, projects, hoveredId, selectedId, onHover, onSelect, viewRef, interact, labelsRef, layerRef, onLabels } = props;
+function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewState>; fade: Fade; labelsRef: React.MutableRefObject<LabelSpec[]>; layerRef: React.RefObject<HTMLDivElement | null>; onLabels: (l: LabelSpec[]) => void; interact: React.MutableRefObject<Interaction> }) {
+  const { mode, step, focusDistricts, projects, hoveredId, selectedId, onHover, onSelect, viewRef, interact, labelsRef, layerRef, onLabels, fade } = props;
   const [local, setLocal] = useState<string | null>(null);
   const active = hoveredId ?? local;
   const palette = usePalette();
   const city = useCity();
   const gl = useThree((s) => s.gl);
   const projKey = projects.map((p) => p.id).join(',');
-  const shot = useMemo(
-    () => computeShot(mode, step, projects, selectedId),
-    [mode, step, selectedId, projKey], // eslint-disable-line react-hooks/exhaustive-deps
-  );
   const selected = mode === 'detail' ? projects.find((p) => p.id === selectedId) ?? null : null;
+  const detailAz = useMemo(() => (selected && city ? pickAzimuth(city, selected) : 212), [selected, city]);
+  const shot = useMemo(
+    () => computeShot(mode, step, projects, selectedId, detailAz),
+    [mode, step, selectedId, projKey, detailAz], // eslint-disable-line react-hooks/exhaustive-deps
+  );
   const hide: HideRect | null = useMemo(() => {
     if (!selected) return null;
     const { x, z } = project(selected.lat, selected.lon);
@@ -84,7 +87,7 @@ function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewSt
       <color attach="background" args={[palette.ink]} />
       <fog attach="fog" args={[palette.ink, 1000, 30000]} />
       <FogColor color={palette.ink} />
-      <CameraRig shot={shot} viewRef={viewRef} interact={interact} />
+      <CameraRig shot={shot} viewRef={viewRef} interact={interact} fade={fade} />
       {city && (
         <CityLayers
           city={city}
@@ -93,6 +96,7 @@ function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewSt
           focus={focusDistricts}
           hide={hide}
           hideDistrict={selected?.district ?? null}
+          fade={fade}
         />
       )}
       {selected && <ProjectTower project={selected} palette={palette} />}
@@ -122,7 +126,8 @@ function FogColor({ color }: { color: string }) {
 
 export function CityScene(rawProps: SceneProps) {
   const props = useEffective(rawProps);
-  const viewRef = useRef<ViewState>({ tx: 0, tz: 0, dist: 28000, az: 205, polar: 57 });
+  const viewRef = useRef<ViewState>({ tx: 0, tz: 0, ty: 0, dist: 28000, az: 205, polar: 57, rad: 400000 });
+  const fade = useMemo<Fade>(() => createFade(), []);
   const labelsRef = useRef<LabelSpec[]>([]);
   const layerRef = useRef<HTMLDivElement>(null);
   const [labels, setLabels] = useState<LabelSpec[]>([]);
@@ -136,10 +141,10 @@ export function CityScene(rawProps: SceneProps) {
         camera={{ fov: 30, near: 100, far: 100000, position: [0, 20000, 20000] }}
         onPointerMissed={() => undefined}
       >
-        <SceneInner {...props} viewRef={viewRef} interact={interact} labelsRef={labelsRef} layerRef={layerRef} onLabels={setLabels} />
+        <SceneInner {...props} viewRef={viewRef} interact={interact} fade={fade} labelsRef={labelsRef} layerRef={layerRef} onLabels={setLabels} />
       </Canvas>
       <LabelLayer labels={labels} layerRef={layerRef} />
-      <SceneOverlay viewRef={viewRef} />
+      {props.mode !== 'onboarding' && <SceneOverlay viewRef={viewRef} />}
     </div>
   );
 }

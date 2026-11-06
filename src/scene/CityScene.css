@@ -43,6 +43,8 @@
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--muted-on-ink);
+  background: var(--ink);
+  padding: 2px var(--s-1);
   pointer-events: none;
 }
 
@@ -73,8 +75,19 @@
   gap: var(--s-2);
 }
 
-.scene-furniture__arrow {
-  display: inline-block;
+.scene-furniture__north {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.scene-furniture__north svg {
+  display: block;
+}
+
+.scene-furniture__north span {
+  display: block;
 }
 
 .scene-furniture__bar {

@@ -12,7 +12,7 @@ export function Units({ units, selected, onSelect }: Props) {
           <span>Type</span><span>Size</span><span>Price</span><span>AED / sq ft</span>
         </div>
         {units.map((u, i) => (
-          <button key={u.kind} type="button" role="radio" aria-checked={i === selected}
+          <button key={`${i}-${u.kind}-${u.sqft}`} type="button" role="radio" aria-checked={i === selected}
             className="detail-units__row detail-units__item num" onClick={() => onSelect(i)}>
             <span>{unitLabel(u.kind)}</span>
             <span>{int(u.sqft)} sq ft</span>

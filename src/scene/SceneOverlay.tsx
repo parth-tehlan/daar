@@ -8,7 +8,7 @@ const RAD = Math.PI / 180;
 const NICE = [50, 100, 200, 500, 1000, 2000, 5000, 10000];
 
 export function SceneOverlay({ viewRef }: { viewRef: MutableRefObject<ViewState> }) {
-  const arrow = useRef<HTMLSpanElement>(null);
+  const arrow = useRef<SVGSVGElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
   const barLabel = useRef<HTMLSpanElement>(null);
   const coords = useRef<HTMLSpanElement>(null);
@@ -40,9 +40,12 @@ export function SceneOverlay({ viewRef }: { viewRef: MutableRefObject<ViewState>
 
   return (
     <div className="scene-furniture" ref={root} aria-hidden="true">
-      <span className="scene-furniture__row">
+      <span className="scene-furniture__north">
         <span>N</span>
-        <span className="scene-furniture__arrow" ref={arrow}>↑</span>
+        <svg ref={arrow} width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" strokeWidth="1">
+          <line x1="6" y1="19" x2="6" y2="2" />
+          <polyline points="2.5,6 6,2 9.5,6" />
+        </svg>
       </span>
       <span className="scene-furniture__row">
         <span className="scene-furniture__bar" ref={bar} />

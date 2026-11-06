@@ -33,7 +33,7 @@ export function Markers({ projects, palette, active, local, setLocal, onHover, o
       hit: new BoxGeometry(110, 220, 110).translate(0, 100, 0),
       stem,
       accent: new MeshBasicMaterial({ color: palette.accent, fog: true }),
-      faint: new LineBasicMaterial({ color: palette.line, transparent: true, opacity: 0.5, fog: true }),
+      faint: new LineBasicMaterial({ color: palette.line, transparent: true, opacity: 0.8, fog: true }),
       full: new LineBasicMaterial({ color: palette.line, fog: true }),
       hitMat: new MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }),
     };
@@ -52,7 +52,7 @@ export function Markers({ projects, palette, active, local, setLocal, onHover, o
   // keep markers legible when the camera is far away
   useFrame(() => {
     if (root.current) {
-      const k = Math.min(12, Math.max(1, viewRef.current.dist / 3000));
+      const k = Math.min(14, Math.max(1, viewRef.current.dist / 2500));
       for (const c of root.current.children) c.scale.setScalar(k);
     }
   });

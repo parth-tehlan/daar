@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Match } from '../types';
+import type { DistrictId, Match } from '../types';
 import { useStore } from '../state/store';
 import { estimateInventory, estimatedHandover, previewReasons, scoreOne } from '../data';
 import { ProjectDetail } from './detail/ProjectDetail';
@@ -8,6 +8,20 @@ import { PanelFooter } from './PanelFooter';
 import { answerChips } from './answerChips';
 import { netYieldPct } from '../data/util';
 import './ResultsPanel.css';
+
+const AREA_NAME: Record<DistrictId, string> = {
+  marina: 'Marina',
+  palm: 'the Palm',
+  jvc: 'JVC',
+  'dubai-hills': 'Dubai Hills',
+  downtown: 'Downtown',
+  'business-bay': 'Business Bay',
+  'mbr-city': 'MBR City',
+  'creek-harbour': 'Creek Harbour',
+};
+function joinNames(n: string[]): string {
+  return n.length < 2 ? n.join('') : `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}`;
+}
 
 type SortKey = 'fit' | 'price' | 'handover' | 'yield';
 const SORTS: { key: SortKey; label: string }[] = [
@@ -44,7 +58,10 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
 
   const inventory = useMemo(() => estimateInventory(answers), [answers]);
   const chips = useMemo(() => answerChips(answers), [answers]);
-  const sorted = useMemo(() => sortMatches(matches, sort), [matches, sort]);
+  const outsideOf = (m: Match) => answers.areas.length > 0 && !answers.areas.includes(m.project.district);
+  const primary = useMemo(() => sortMatches(matches.filter((m) => !outsideOf(m)), sort), [matches, sort, answers.areas]); // eslint-disable-line react-hooks/exhaustive-deps
+  const outside = useMemo(() => sortMatches(matches.filter(outsideOf), sort), [matches, sort, answers.areas]); // eslint-disable-line react-hooks/exhaustive-deps
+  const areaList = joinNames(answers.areas.map((d) => AREA_NAME[d]));
   const previews = useMemo(() => previewReasons(matches, answers), [matches, answers]);
   const topId = matches[0]?.project.id;
 
@@ -77,7 +94,11 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
         </div>
 
         <h1 className="ResultsPanel__summary display num">
-          {inventory} projects fit. These {matches.length} fit best.
+          {answers.areas.length === 0
+            ? `${inventory} projects fit. These ${matches.length} fit best.`
+            : primary.length === 0
+              ? `Nothing fits in ${areaList}. These ${outside.length} sit just outside.`
+              : `${primary.length} ${primary.length === 1 ? 'project fits' : 'projects fit'} in ${areaList}.${outside.length ? ` ${outside.length} more just outside.` : ''}`}
         </h1>
         <ul className="ResultsPanel__chips">
           {chips.map((c) => (
@@ -108,10 +129,20 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
         </div>
 
         <ul className="ResultsPanel__list">
-          {sorted.map((m, i) => (
+          {primary.map((m, i) => (
             <ResultRow key={m.project.id} match={m} index={i} top={m.project.id === topId} preview={previews.get(m.project.id) ?? ''} />
           ))}
         </ul>
+        {outside.length > 0 && (
+          <>
+            <div className="ResultsPanel__group mono-label">Outside your areas</div>
+            <ul className="ResultsPanel__list ResultsPanel__list--outside">
+              {outside.map((m, i) => (
+                <ResultRow key={m.project.id} match={m} index={primary.length + i} top={false} preview={previews.get(m.project.id) ?? ''} />
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     );
   }

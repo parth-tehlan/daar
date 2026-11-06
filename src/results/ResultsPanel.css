@@ -221,3 +221,14 @@
   color: var(--ink);
   text-decoration-color: var(--ink);
 }
+
+.ResultsPanel__group {
+  margin-top: var(--s-12);
+  padding-bottom: var(--s-3);
+  color: var(--muted-on-paper);
+  text-transform: uppercase;
+}
+.ResultsPanel__list--outside {
+  margin-top: 0;
+  border-top: var(--hairline) solid var(--rule-on-paper);
+}

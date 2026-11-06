@@ -15,7 +15,7 @@ export function getProject(id: string): Project | undefined {
   return PROJECTS.find((p) => p.id === id);
 }
 /** extras for the results panel: score any single project, even if it isn't in the top list */
-export { scoreOne, previewReasons } from './match';
+export { scoreOne, previewReasons, matchGroups } from './match';
 export { estimatedHandover } from './match';
 export { getDeveloper } from './developers';
 export { PROJECTS } from './projects';
