@@ -1,0 +1,15 @@
+.Histogram {
+  position: relative;
+  height: 64px;
+  margin-bottom: var(--s-1);
+}
+.Histogram__bar {
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--rs-half) + var(--t) * (100% - var(--rs-thumb)) - 1px);
+  width: 2px;
+  height: calc(var(--h) * 100%);
+  background: var(--rule-on-ink-strong);
+  transition: background-color var(--t-ui);
+}
+.Histogram__bar.is-on { background: var(--line-on-ink); }

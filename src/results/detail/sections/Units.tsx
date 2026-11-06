@@ -1,0 +1,26 @@
+import type { UnitType } from '../../../types';
+import { int, unitLabel } from '../format';
+import { Section } from './Parts';
+
+interface Props { units: UnitType[]; selected: number; onSelect: (i: number) => void }
+
+export function Units({ units, selected, onSelect }: Props) {
+  return (
+    <Section n="02" title="Units">
+      <div className="detail-units" role="radiogroup" aria-label="Unit type used in the calculators">
+        <div className="detail-units__row detail-units__head mono-label" aria-hidden="true">
+          <span>Type</span><span>Size</span><span>Price</span><span>AED / sq ft</span>
+        </div>
+        {units.map((u, i) => (
+          <button key={u.kind} type="button" role="radio" aria-checked={i === selected}
+            className="detail-units__row detail-units__item num" onClick={() => onSelect(i)}>
+            <span>{unitLabel(u.kind)}</span>
+            <span>{int(u.sqft)} sq ft</span>
+            <span>{int(u.priceAED)}</span>
+            <span>{int(u.priceAED / u.sqft)}</span>
+          </button>
+        ))}
+      </div>
+    </Section>
+  );
+}

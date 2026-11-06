@@ -1,0 +1,66 @@
+.ChoiceRows {
+  max-width: 640px;
+  border-top: var(--hairline) solid var(--rule-on-ink);
+}
+.ChoiceRows__row {
+  display: grid;
+  grid-template-columns: var(--s-8) 1fr;
+  align-items: center;
+  row-gap: 2px;
+  column-gap: var(--s-4);
+  width: 100%;
+  min-height: var(--s-16);
+  padding: calc(var(--s-4) + 2px) 0;
+  border-bottom: var(--hairline) solid var(--rule-on-ink);
+  color: var(--line-on-ink);
+}
+.ChoiceRows__index {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  letter-spacing: var(--tracking-label);
+  color: var(--muted-on-ink);
+  display: flex;
+  align-items: center;
+}
+.ChoiceRows__mark {
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+}
+.ChoiceRows__label {
+  font-size: var(--fs-22);
+  line-height: var(--lh-snug);
+  transition: color var(--t-ui);
+}
+.ChoiceRows__desc {
+  font-size: var(--fs-13);
+  line-height: 1.45;
+  color: var(--muted-on-ink);
+  grid-column: 2;
+  text-align: left;
+}
+.ChoiceRows__row:hover .ChoiceRows__label { color: var(--naples); }
+.ChoiceRows__row.is-on .ChoiceRows__label { font-weight: 500; }
+
+/* compact: two-column grid, note under the name */
+.ChoiceRows--compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--s-8);
+  max-width: 760px;
+}
+.ChoiceRows--compact .ChoiceRows__row {
+  grid-template-columns: var(--s-8) 1fr;
+  align-items: start;
+  row-gap: var(--s-1);
+  min-height: 0;
+  padding: var(--s-3) 0;
+}
+.ChoiceRows--compact .ChoiceRows__index { padding-top: var(--s-1); height: var(--s-6); }
+.ChoiceRows--compact .ChoiceRows__label { font-size: var(--fs-17); }
+.ChoiceRows--compact .ChoiceRows__desc {
+  grid-column: 2;
+  text-align: left;
+  justify-self: start;
+  max-width: none;
+}

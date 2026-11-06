@@ -1,13 +1,21 @@
-// STUB — results agent replaces this. Public API of the data layer:
+// Public API of the placeholder data layer.
 import type { Answers, Match, Project } from '../types';
-/** ranked matches, best first (8–12 items) */
-export function matchProjects(_a: Answers): Match[] {
-  return [];
+import { PROJECTS } from './projects';
+import * as m from './match';
+
+/** ranked matches, best first (up to 10) */
+export function matchProjects(a: Answers): Match[] {
+  return m.matchProjects(a);
 }
 /** plausible size of the whole matching inventory, for the live onboarding count */
-export function estimateInventory(_a: Answers): number {
-  return 214;
+export function estimateInventory(a: Answers): number {
+  return m.estimateInventory(a);
 }
-export function getProject(_id: string): Project | undefined {
-  return undefined;
+export function getProject(id: string): Project | undefined {
+  return PROJECTS.find((p) => p.id === id);
 }
+/** extras for the results panel: score any single project, even if it isn't in the top list */
+export { scoreOne, previewReasons } from './match';
+export { estimatedHandover } from './match';
+export { getDeveloper } from './developers';
+export { PROJECTS } from './projects';
