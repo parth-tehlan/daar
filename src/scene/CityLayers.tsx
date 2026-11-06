@@ -26,7 +26,7 @@ function District({ id, list, parts, palette, opacity, fillMat, hide, fade }: {
 }) {
   const geo = useMemo(() => buildBuildings(list, parts, hide), [list, parts, hide]);
   const lineMat = useMemo(
-    () => fadeLineMaterial(fade, { color: palette.line, opacity }),
+    () => fadeLineMaterial(fade, { color: palette.line, opacity }, 1, 0.1, true),
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
   useEffect(() => { lineMat.color.set(palette.line); }, [lineMat, palette.line]);

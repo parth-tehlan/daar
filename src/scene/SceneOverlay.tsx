@@ -23,7 +23,7 @@ export function SceneOverlay({ viewRef }: { viewRef: MutableRefObject<ViewState>
       const h = root.current?.parentElement?.clientHeight ?? 800;
       const ppm = h / (2 * v.dist * Math.tan(15 * RAD)); // px per metre at the target
       let m = NICE[0];
-      for (const n of NICE) { m = n; if (n * ppm >= 70) break; }
+      for (const n of NICE) { if (n * ppm <= 140) m = n; }
       const key = `${v.az.toFixed(1)}|${(m * ppm).toFixed(0)}|${v.tx.toFixed(0)}|${v.tz.toFixed(0)}`;
       if (key === last) return;
       last = key;

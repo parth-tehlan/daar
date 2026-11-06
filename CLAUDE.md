@@ -54,3 +54,9 @@ qa/                          screenshots                    (anyone)
 - Use the coordinates in `DISTRICTS` (`src/types.ts`). The world origin is
   lat 25.1500, lon 55.2300. Use an equirectangular projection to metres
   (x = east, z = −north, y = up).
+
+## Demo URLs (dev)
+- `/` starts onboarding from scratch
+- `/?view=results` shows results with demo answers
+- `/?view=detail&id=seventeen-canal` shows detail (also `marsa-21`, `harbour-row`, `ghaf-residences`)
+- `&plate=303` or `&plate=296` switches the Wada colour plate (also in the panel footer)

@@ -14,8 +14,8 @@ export function DelayStrip({ projects }: { projects: PastProject[] }) {
           ))}
         </span>
       </div>
-      {projects.map((p) => (
-        <div className="detail-strip__row" key={p.name}>
+      {projects.map((p, i) => (
+        <div className="detail-strip__row" key={`${i}-${p.name}`}>
           <span className="detail-strip__name">{p.name}</span>
           <span className="detail-strip__scale" role="img" aria-label={`${p.name}: ${p.delayMonths} months late`}>
             <span className="detail-strip__axis" />

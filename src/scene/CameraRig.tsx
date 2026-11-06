@@ -154,6 +154,14 @@ export function CameraRig({ shot, viewRef, interact, fade }: Props) {
     }
     fade.uFocus.value.set(c.tx, c.tz);
     fade.uRadius.value = c.rad;
+    const mt = sh.maskFloor ?? 1;
+    fade.uMaskFloor.value += (mt - fade.uMaskFloor.value) * Math.min(1, dt * 4);
+    fade.uViewportW.value = gl.domElement.width;
+    fade.uViewportH.value = gl.domElement.height;
+    fade.uBotFloor.value = fade.uMaskFloor.value;
+    if (sh.mode !== 'onboarding') fade.uBotFloor.value = 1;
+    const q = Math.min(1, Math.max(0, (c.dist - 4000) / 11000));
+    fade.uLod.value = 1 - (1 - 0.28) * q * q * (3 - 2 * q);
     viewRef.current = { ...c };
   });
 

@@ -53,7 +53,10 @@ export function Markers({ projects, palette, active, local, setLocal, onHover, o
   useFrame(() => {
     if (root.current) {
       const k = Math.min(14, Math.max(1, viewRef.current.dist / 2500));
-      for (const c of root.current.children) c.scale.setScalar(k);
+      for (const c of root.current.children) {
+        c.scale.setScalar(k);
+        c.children[0]?.scale.setScalar(Math.min(k, 7) / k);
+      }
     }
   });
 

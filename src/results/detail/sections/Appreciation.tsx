@@ -22,8 +22,8 @@ export function Appreciation({ price, t, developer }: Props) {
         <div className="detail-record__row detail-record__head mono-label" role="row">
           <span>Project</span><span>District</span><span className="r nw">AED/sq ft, launch → now</span><span className="r">Per year</span><span className="r">Delay</span>
         </div>
-        {developer.pastProjects.map((p) => (
-          <div className="detail-record__row" role="row" key={p.name}>
+        {developer.pastProjects.map((p, i) => (
+          <div className="detail-record__row" role="row" key={`${i}-${p.name}`}>
             <span>{p.name}</span>
             <span>{SHORT_DISTRICT[p.district]}</span>
             <span className="r nw">{int(p.launchPsf)} → {int(p.currentPsf)}</span>

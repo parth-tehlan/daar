@@ -55,6 +55,14 @@ function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewSt
     };
   }, [selected]);
 
+  useEffect(() => {
+    if (selected) {
+      const { x, z } = project(selected.lat, selected.lon);
+      fade.uClear.value.set(x, z, 180);
+      
+    } else fade.uClear.value.set(0, 0, 0);
+  }, [selected, fade]);
+
   const labels = useMemo<LabelSpec[]>(() => {
     const out: LabelSpec[] = [];
     if (selected) {
@@ -73,7 +81,7 @@ function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewSt
     }
     if (mode === 'onboarding' && step === 5) {
       for (const d of DISTRICT_POS) {
-        out.push({ id: d.id, x: d.x, z: d.z, y: 0, cls: `scene-tag${focusDistricts.includes(d.id) ? ' scene-tag--focus' : ''}`, text: d.name });
+        out.push({ id: d.id, x: d.x, z: d.z + (d.id === 'downtown' ? -1100 : d.id === 'business-bay' ? 1100 : d.id === 'mbr-city' ? 900 : 0), y: 0, cls: `scene-tag${focusDistricts.includes(d.id) ? ' scene-tag--focus' : ''}`, text: d.name });
       }
     }
     return out;

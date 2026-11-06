@@ -5,8 +5,8 @@ export function Why({ match }: { match: Match }) {
   return (
     <Section n="01" title="Why it fits">
       <ul className="detail-why">
-        {match.reasons.map((r) => (
-          <li className="detail-why__row" key={r.because}>
+        {match.reasons.map((r, i) => (
+          <li className="detail-why__row" key={`${i}-${r.because}`}>
             <span className="detail-why__because">{r.because}</span>
             <span className="detail-why__finding">{r.finding}</span>
           </li>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { BoxGeometry, BufferGeometry, EdgesGeometry, Float32BufferAttribute, LineBasicMaterial, LineDashedMaterial, LineSegments, MeshBasicMaterial } from 'three';
+import { BoxGeometry, BufferGeometry, EdgesGeometry, Float32BufferAttribute, LineBasicMaterial, LineDashedMaterial, LineSegments, MeshBasicMaterial, PlaneGeometry } from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { project } from '../types';
 import type { Project } from '../types';
@@ -48,15 +48,17 @@ export function ProjectTower({ project: p, palette }: { project: Project; palett
     floors.setAttribute('position', new Float32BufferAttribute(fl, 3));
     const lead = new BufferGeometry();
     lead.setAttribute('position', new Float32BufferAttribute([0, p.heightM, 0, 0, p.heightM + LEADER, 0], 3));
-    return { fill, edges, floors, lead };
+    const foot = new PlaneGeometry(p.footprintM.w * 1.3, p.footprintM.d * 1.3).rotateX(-Math.PI / 2);
+    return { fill, edges, floors, lead, foot };
   }, [p]);
 
   const mats = useMemo(() => ({
     fill: new MeshBasicMaterial({ color: palette.ink, fog: true, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }),
-    dash: new LineDashedMaterial({ color: palette.accent, dashSize: 6, gapSize: 4, fog: true }),
+    dash: new LineDashedMaterial({ color: palette.accent, dashSize: 4, gapSize: 3, fog: true }),
     floors: new LineBasicMaterial({ color: palette.accent, transparent: true, opacity: 0.35, fog: true }),
     lead: new LineBasicMaterial({ color: palette.accent, fog: true }),
-    ghost: new LineDashedMaterial({ color: palette.accent, dashSize: 6, gapSize: 4, transparent: true, opacity: 0.3, depthTest: false, depthWrite: false }),
+    foot: new MeshBasicMaterial({ color: palette.accent, transparent: true, opacity: 0.18, depthWrite: false, fog: true }),
+    ghost: new LineDashedMaterial({ color: palette.accent, dashSize: 4, gapSize: 3, transparent: true, opacity: 0.4, depthTest: false, depthWrite: false }),
   }), []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     mats.fill.color.set(palette.ink);
@@ -64,6 +66,7 @@ export function ProjectTower({ project: p, palette }: { project: Project; palett
     mats.floors.color.set(palette.accent);
     mats.lead.color.set(palette.accent);
     mats.ghost.color.set(palette.accent);
+    mats.foot.color.set(palette.accent);
   }, [palette, mats]);
   useEffect(() => () => Object.values(mats).forEach((m) => m.dispose()), [mats]);
 
@@ -72,12 +75,13 @@ export function ProjectTower({ project: p, palette }: { project: Project; palett
     l.computeLineDistances();
     return l;
   }, [data, mats]);
-  useEffect(() => () => { data.fill.dispose(); data.edges.dispose(); data.floors.dispose(); data.lead.dispose(); }, [data]);
+  useEffect(() => () => { data.fill.dispose(); data.edges.dispose(); data.floors.dispose(); data.lead.dispose(); data.foot.dispose(); }, [data]);
 
   const theta = (-p.rotationDeg * Math.PI) / 180;
   return (
     <group position={[x, 0, z]}>
       <group rotation={[0, theta, 0]}>
+        <mesh geometry={data.foot} material={mats.foot} position={[0, 0.7, 0]} raycast={noRaycast} renderOrder={3} />
         <mesh geometry={data.fill} material={mats.fill} raycast={noRaycast} renderOrder={3} />
         <primitive object={dashed} renderOrder={4} raycast={noRaycast} />
         <lineSegments geometry={data.edges} material={mats.ghost} renderOrder={6} raycast={noRaycast} />
