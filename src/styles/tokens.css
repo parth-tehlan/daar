@@ -103,6 +103,11 @@
 
   /* Layout */
   --panel-w: clamp(520px, 44vw, 720px);
+  /* Mobile (≤760px): the city is a band across the top; UI sheets start below it.
+     Must match MOBILE_BAND in src/layout.ts. */
+  --scene-band-onb: 34dvh;
+  --scene-band: 42dvh;
+  --mobile-gutter: 20px;
   --content-w: 560px;
 
   /* Motion — functional only (TASTE.md §4) */

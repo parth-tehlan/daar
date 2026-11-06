@@ -72,3 +72,13 @@
 .Step__chip:hover { border-color: var(--line-on-ink); }
 .Step__chip.is-on { background: var(--line-on-ink); border-color: var(--line-on-ink); color: var(--ink); }
 .Step__chipOrder { font-size: var(--fs-13); font-weight: 500; }
+
+@media (max-width: 760px) {
+  .Step { max-width: none; }
+  .Step__readout { font-size: var(--fs-28); margin-bottom: var(--s-4); }
+  .Step__squares { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+  .Step__square { width: auto; height: auto; aspect-ratio: 1; }
+  .Step__squareCap { white-space: normal; padding: 0 2px; line-height: 1.2; text-align: center; text-wrap: balance; }
+  .Step__squareNum { font-size: var(--fs-28); }
+  .Step__chips { max-width: none; }
+}

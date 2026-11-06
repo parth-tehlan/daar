@@ -34,7 +34,7 @@ export function AppreciationChart({ price, growthPct, todayYear, handoverYear }:
   const band = `M${up.join('L')}L${dn.join('L')}Z`;
   const endVal = grow(price, growthPct, years);
   const xs = Array.from({ length: x1 - Math.ceil(x0) + 1 }, (_, i) => Math.ceil(x0) + i).filter((yr) => X(yr) - M.l > 48);
-  const stride = xs.length > 8 ? 2 : 1;
+  const stride = w < 420 ? Math.ceil(xs.length / Math.max(2, Math.floor((w - M.l) / 56))) : xs.length > 8 ? 2 : 1;
   const xh = X(handoverYear);
 
   return (

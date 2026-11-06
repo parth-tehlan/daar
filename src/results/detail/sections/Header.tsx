@@ -24,7 +24,11 @@ export function Header({ match, unit }: { match: Match; unit: UnitType }) {
         {project.name}
         {project.subtitle ? <span className="detail-head__sub"> {project.subtitle}</span> : null}
       </h1>
-      <p className="detail-head__facts">{project.facts.slice(0, 2).join(' · ')}</p>
+      <p className="detail-head__facts">
+        {project.facts.slice(0, 2).map((f, i) => (
+          <span className="detail-head__fact" key={`${i}-${f}`}>{i ? <span className="detail-head__sep"> · </span> : null}{f}</span>
+        ))}
+      </p>
       <StatRow items={[
         { label: 'From', value: compact(unit.priceAED), prefix: 'AED' },
         { label: 'Size', value: int(unit.sqft), unit: 'sq ft' },

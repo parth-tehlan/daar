@@ -1,6 +1,7 @@
 import { DISTRICTS, project } from '../types';
 import type { Project, SceneMode } from '../types';
 import type { CityData } from './geo';
+import { isMobile, sceneViewport } from '../layout';
 
 export interface ViewState {
   tx: number;
@@ -35,13 +36,14 @@ export interface Interaction {
 export const deg = Math.PI / 180;
 const NO_FADE = 400000;
 
-export function panelWidth(vw: number): number {
-  return Math.min(720, Math.max(520, vw * 0.44));
-}
-
-/** horizontal view-offset in px (negative shifts the city to the right) */
-export function viewOffsetX(mode: SceneMode, w: number, offFrac = 0.225): number {
-  return mode === 'onboarding' ? -offFrac * w : -panelWidth(w) / 2;
+/**
+ * View offset in px that puts the shot target at the centre of the visible rect.
+ * Desktop onboarding keeps the per-step composition fraction (offFrac).
+ */
+export function viewOffset(mode: SceneMode, w: number, h: number, offFrac?: number): { x: number; y: number } {
+  if (mode === 'onboarding' && offFrac !== undefined && !isMobile(w)) return { x: -offFrac * w, y: 0 };
+  const r = sceneViewport(mode, w, h);
+  return { x: w / 2 - (r.x + r.w / 2), y: h / 2 - (r.y + r.h / 2) };
 }
 
 export const DISTRICT_POS = DISTRICTS.map((d) => ({ id: d.id, name: d.name, ...project(d.lat, d.lon) }));
@@ -59,17 +61,18 @@ const at = (lat: number, lon: number) => project(lat, lon);
 const T = Math.tan((15 * Math.PI) / 180);
 
 /** onboarding tour: one district per step */
-function tour(step: number): Shot {
-  const base = { mode: 'onboarding' as const, drift: 0.4, offFrac: 0.225, maskFloor: 0.12 };
+function tour(step: number, mob: boolean): Shot {
+  const k = mob ? 1.7 : 1;
+  const base = { mode: 'onboarding' as const, drift: mob ? 0.25 : 0.4, offFrac: 0.225, maskFloor: mob ? 1 : 0.12 };
   const city = bounds(DISTRICT_POS);
   switch (step) {
-    case 0: { const p = at(25.1972, 55.2744); return { ...base, tx: p.x, tz: p.z, ty: 260, dist: 2900, az: 168, polar: 66, rad: 2600 }; }
-    case 1: { const p = at(25.1865, 55.2650); return { ...base, tx: p.x, tz: p.z, ty: 60, dist: 2500, az: 130, polar: 60, rad: 2400 }; }
-    case 2: { const p = at(25.0790, 55.1400); return { ...base, tx: p.x, tz: p.z, ty: 120, dist: 2800, az: 232, polar: 61, rad: 2500 }; }
-    case 3: { const p = at(25.2000, 55.3440); return { ...base, tx: p.x, tz: p.z, ty: 40, dist: 2800, az: 200, polar: 60, rad: 2500 }; }
-    case 4: { const p = at(25.1095, 55.2455); return { ...base, tx: p.x, tz: p.z, ty: 20, dist: 2800, az: 150, polar: 58, rad: 2500 }; }
-    case 5: return { ...base, tx: city.cx, tz: city.cz + 600, ty: 0, dist: 80000, az: 0, polar: 25, rad: NO_FADE, drift: 0, offFrac: 0.275, maskFloor: 0.15 };
-    default: { const p = at(25.0965, 55.1395); return { ...base, tx: p.x, tz: p.z, ty: 30, dist: 9500, az: 228, polar: 63, rad: 7000 }; }
+    case 0: { const p = at(25.1972, 55.2744); return { ...base, tx: p.x, tz: p.z, ty: 260, dist: 2900 * k, az: 168, polar: 66, rad: 2600 }; }
+    case 1: { const p = at(25.1865, 55.2650); return { ...base, tx: p.x, tz: p.z, ty: 60, dist: 2500 * k, az: 130, polar: 60, rad: 2400 }; }
+    case 2: { const p = at(25.0790, 55.1400); return { ...base, tx: p.x, tz: p.z, ty: 120, dist: 2800 * k, az: 232, polar: 61, rad: 2500 }; }
+    case 3: { const p = at(25.2000, 55.3440); return { ...base, tx: p.x, tz: p.z, ty: 40, dist: 2800 * k, az: 200, polar: 60, rad: 2500 }; }
+    case 4: { const p = at(25.1095, 55.2455); return { ...base, tx: p.x, tz: p.z, ty: 20, dist: 2800 * k, az: 150, polar: 58, rad: 2500 }; }
+    case 5: return { ...base, tx: city.cx, tz: city.cz + 600, ty: 0, dist: mob ? 125000 : 80000, az: 0, polar: 25, rad: NO_FADE, drift: 0, offFrac: 0.275, maskFloor: mob ? 1 : 0.15 };
+    default: { const p = at(25.0965, 55.1395); return { ...base, tx: p.x, tz: p.z, ty: 30, dist: 9500 * k, az: 228, polar: 63, rad: 7000 }; }
   }
 }
 
@@ -110,12 +113,13 @@ export function pickAzimuth(city: CityData, p: Project, dist = 1700, polar = 40)
   return best;
 }
 
-export function computeShot(mode: SceneMode, step: number, projects: Project[], selectedId: string | null, detailAz = 212): Shot {
+export function computeShot(mode: SceneMode, step: number, projects: Project[], selectedId: string | null, detailAz = 212, vw = window.innerWidth, vh = window.innerHeight): Shot {
+  const mob = isMobile(vw);
   if (mode === 'detail') {
     const p = projects.find((q) => q.id === selectedId);
     if (p) {
       const { x, z } = project(p.lat, p.lon);
-      return { mode, tx: x, tz: z, ty: p.heightM * 0.4, dist: 1700, az: detailAz, polar: 40, rad: 1400, drift: 0.4, maskFloor: 1 };
+      return { mode, tx: x, tz: z, ty: p.heightM * 0.4, dist: mob ? 2800 : 1700, az: detailAz, polar: 40, rad: 1400, drift: mob ? 0.25 : 0.4, maskFloor: 1 };
     }
   }
   if (mode === 'results' && projects.length > 0) {
@@ -133,15 +137,15 @@ export function computeShot(mode: SceneMode, step: number, projects: Project[], 
     }
     const cr = (r0 + r1) / 2;
     const cf = (f0 + f1) / 2;
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const visAspect = Math.max(0.5, (w - panelWidth(w)) / h);
+    const vr = sceneViewport(mode, vw, vh);
+    const visAspect = Math.max(0.5, vr.w / vh);
+    const visH = vr.h / vh;
     const spanR = Math.max(900, r1 - r0) * 1.4;
     const spanF = Math.max(900, f1 - f0) * 1.4;
-    const dist = Math.max(3200, spanR / (2 * T * visAspect), (spanF * Math.cos(polar * deg)) / (2 * T));
+    const dist = Math.max(3200, spanR / (2 * T * visAspect), (spanF * Math.cos(polar * deg)) / (2 * T * visH));
     return {
       mode, tx: cr * r.x + cf * f.x, tz: cr * r.z + cf * f.z, ty: 0, dist, az, polar, rad: NO_FADE, drift: 0, maskFloor: 1,
     };
   }
-  return tour(Math.max(0, Math.min(6, step)));
+  return tour(Math.max(0, Math.min(6, step)), mob);
 }

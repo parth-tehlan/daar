@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
+import { isMobile } from '../layout';
 import { Fog } from 'three';
 import type { SceneProps } from '../types';
 import { project } from '../types';
@@ -20,6 +21,18 @@ import { usePalette } from './theme';
 import type { HideRect } from './buildCity';
 import './CityScene.css';
 
+function useViewport() {
+  const [v, setV] = useState({ w: window.innerWidth, h: window.innerHeight });
+  useEffect(() => {
+    const f = () => setV({ w: window.innerWidth, h: window.innerHeight });
+    window.addEventListener('resize', f);
+    return () => window.removeEventListener('resize', f);
+  }, []);
+  return v;
+}
+
+const MOBILE_DISTRICTS = ['marina', 'downtown', 'palm', 'jvc'];
+
 function useEffective(props: SceneProps): SceneProps {
   if (import.meta.env.DEV) {
     const q = new URLSearchParams(window.location.search);
@@ -39,12 +52,15 @@ function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewSt
   const palette = usePalette();
   const city = useCity();
   const gl = useThree((s) => s.gl);
+  const invalidate = useThree((s) => s.invalidate);
+  const vp = useViewport();
+  const mobile = isMobile(vp.w);
   const projKey = projects.map((p) => p.id).join(',');
   const selected = mode === 'detail' ? projects.find((p) => p.id === selectedId) ?? null : null;
   const detailAz = useMemo(() => (selected && city ? pickAzimuth(city, selected) : 212), [selected, city]);
   const shot = useMemo(
-    () => computeShot(mode, step, projects, selectedId, detailAz),
-    [mode, step, selectedId, projKey, detailAz], // eslint-disable-line react-hooks/exhaustive-deps
+    () => computeShot(mode, step, projects, selectedId, detailAz, vp.w, vp.h),
+    [mode, step, selectedId, projKey, detailAz, vp.w, vp.h], // eslint-disable-line react-hooks/exhaustive-deps
   );
   const hide: HideRect | null = useMemo(() => {
     if (!selected) return null;
@@ -82,12 +98,14 @@ function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewSt
     }
     if (mode === 'onboarding' && step === 5) {
       for (const d of DISTRICT_POS) {
+        if (mobile && !focusDistricts.includes(d.id) && !MOBILE_DISTRICTS.includes(d.id)) continue;
         out.push({ id: d.id, x: d.x, z: d.z + (d.id === 'downtown' ? -1100 : d.id === 'business-bay' ? 1100 : d.id === 'mbr-city' ? 900 : 0), y: 0, cls: `scene-tag${focusDistricts.includes(d.id) ? ' scene-tag--focus' : ''}`, text: d.name });
       }
     }
     return out;
-  }, [selected, mode, projects, active, step, focusDistricts]);
+  }, [selected, mode, projects, active, step, focusDistricts, mobile]);
   labelsRef.current = labels;
+  useEffect(() => { invalidate(); });
   useEffect(() => { onLabels(labels); }, [labels, onLabels]);
 
   return (
@@ -135,6 +153,7 @@ function FogColor({ color }: { color: string }) {
 
 export function CityScene(rawProps: SceneProps) {
   const props = useEffective(rawProps);
+  const mobile = isMobile(useViewport().w);
   const viewRef = useRef<ViewState>({ tx: 0, tz: 0, ty: 0, dist: 28000, az: 205, polar: 57, rad: 400000 });
   const fade = useMemo<Fade>(() => createFade(), []);
   const labelsRef = useRef<LabelSpec[]>([]);
@@ -144,7 +163,8 @@ export function CityScene(rawProps: SceneProps) {
   return (
     <div className="scene">
       <Canvas
-        dpr={[1, 2]}
+        dpr={mobile ? [1, 1.5] : [1, 2]}
+        frameloop={mobile ? 'demand' : 'always'}
         flat
         gl={{ antialias: true }}
         camera={{ fov: 30, near: 100, far: 100000, position: [0, 20000, 20000] }}

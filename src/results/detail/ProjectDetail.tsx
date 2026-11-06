@@ -13,6 +13,7 @@ import { ActionBar } from './sections/ActionBar';
 import './ProjectDetail.css';
 import './sections/sections.css';
 import './charts/charts.css';
+import './mobile.css';
 
 export interface ProjectDetailProps {
   match: Match;

@@ -201,3 +201,15 @@ Plain and specific, like a good broker's note. Use **sentence case everywhere** 
 6. Every number needs a unit and must be tabular.
 7. Search for `font-mono`, `text-transform: uppercase`, `letter-spacing` above 0.02em, and zero-padded numbers. The only allowed hit is the wordmark.
 8. Would this look at home on Aman's or Omniyat's website? If it looks like a developer tool, it fails.
+
+---
+
+## 8. Mobile (≤ 760px)
+
+The layout is a vertical split, not a squeezed desktop.
+- **The city is a band across the top**: 34dvh in onboarding and 42dvh in results/detail. The canvas stays full-screen behind everything, and the scene composes the city inside that band (`sceneViewport()` in `src/layout.ts`).
+- **The UI is a sheet below the band** with a solid background: `--ink` in onboarding, `--paper` in results/detail. The sheet scrolls on its own, with a 1px rule on its top edge. There are no rounded sheet corners and no drag handles.
+- Gutters are `--mobile-gutter` (20px). Display sizes step down one notch: 56 → 40 and 40 → 28.
+- **One action bar** is fixed to the bottom, full width, and respects `env(safe-area-inset-bottom)`. The primary button spans the width.
+- Touch targets are ≥ 44px, and there are no hover-only affordances.
+- **Desktop must not change.** Every mobile rule lives inside `@media (max-width: 760px)`.

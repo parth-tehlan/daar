@@ -106,3 +106,16 @@
   height: var(--s-1);
   box-sizing: border-box;
 }
+
+@media (max-width: 760px) {
+  .scene-label__name {
+    font-size: var(--fs-13);
+  }
+
+  .scene-furniture {
+    right: var(--s-4);
+    bottom: auto;
+    top: calc(var(--scene-band) - var(--s-4));
+    transform: translateY(-100%);
+  }
+}

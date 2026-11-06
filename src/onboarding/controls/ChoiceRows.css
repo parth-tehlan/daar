@@ -63,3 +63,16 @@
   justify-self: start;
   max-width: none;
 }
+
+@media (max-width: 760px) {
+  .ChoiceRows { max-width: none; }
+  .ChoiceRows__label { font-size: var(--fs-17); }
+  .ChoiceRows__row { min-height: var(--s-16); padding: var(--s-4) 0; }
+  .ChoiceRows--compact { grid-template-columns: 1fr; max-width: none; }
+  .ChoiceRows--compact .ChoiceRows__row { min-height: 0; padding: var(--s-3) 0; }
+}
+
+@media (max-width: 760px) {
+  .ChoiceRows__row,
+  .ChoiceRows--compact .ChoiceRows__row { grid-template-columns: var(--s-6) 1fr; column-gap: 0; }
+}
