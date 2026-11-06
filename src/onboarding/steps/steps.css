@@ -35,8 +35,7 @@
 .Step__squareNum { font-size: var(--fs-40); }
 .Step__squareText { font-size: var(--fs-17); line-height: var(--lh-tight); padding: var(--s-2) 0; }
 .Step__squareCap {
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
+  font-size: var(--fs-12);
   color: var(--muted-on-ink);
   white-space: nowrap;
 }
@@ -72,4 +71,4 @@
 }
 .Step__chip:hover { border-color: var(--line-on-ink); }
 .Step__chip.is-on { background: var(--line-on-ink); border-color: var(--line-on-ink); color: var(--ink); }
-.Step__chipOrder { font-family: var(--font-mono); font-size: var(--fs-11); }
+.Step__chipOrder { font-size: var(--fs-13); font-weight: 500; }

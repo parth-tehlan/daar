@@ -8,7 +8,7 @@
 
 .detail-units__row { display: grid; grid-template-columns: 1fr 1.2fr 1.3fr 1.1fr; gap: var(--s-2); width: 100%; text-align: left; align-items: baseline; }
 .detail-units__row > :nth-child(n+2) { text-align: right; }
-.detail-units__head { color: var(--muted-on-paper); padding-bottom: var(--s-2); border-bottom: 1px solid var(--rule-on-paper); }
+.detail-units__head { font-size: var(--fs-12); color: var(--muted-on-paper); padding-bottom: var(--s-2); border-bottom: 1px solid var(--rule-on-paper); }
 .detail-units__item { position: relative; isolation: isolate; min-height: var(--target); padding: var(--s-3) 0; border-bottom: 1px solid var(--rule-on-paper); font-size: var(--fs-15); font-variant-numeric: tabular-nums; }
 .detail-units__item::before { content: ''; position: absolute; inset: 0 calc(var(--s-2) * -1) -1px; z-index: -1; transition: background-color var(--t-ui); }
 .detail-units__item:hover::before, .detail-units__item[aria-checked='true']::before { background: var(--paper-2); }
@@ -20,7 +20,8 @@
 .detail-plan__seg { min-width: 0; }
 .detail-plan__seg--a { background: var(--ink); }
 .detail-plan__seg--b { background: var(--paper-2); }
-.detail-plan__mark { position: absolute; top: calc(24px + var(--s-1)); color: var(--muted-on-paper); white-space: nowrap; }
+.detail-plan__mark { position: absolute; top: 24px; font-size: var(--fs-11); color: var(--muted-on-paper); white-space: nowrap; }
+.detail-plan__tick { display: block; width: 1px; height: 6px; background: var(--ink); margin-bottom: var(--s-1); }
 .detail-plan__rows { margin-top: var(--s-2); }
 .detail-plan__row { display: grid; grid-template-columns: 1.5fr 1.4fr 0.5fr 1.2fr; gap: var(--s-2); padding: var(--s-3) 0; border-top: 1px solid var(--rule-on-paper); font-size: var(--fs-15); align-items: baseline; }
 .detail-plan__row:first-child { border-top: 0; }
@@ -29,11 +30,11 @@
 .detail-plan__row.is-post { font-weight: 500; }
 
 .detail-term { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s-8); }
-.detail-mortgage__headline { font-size: var(--fs-40); margin-bottom: var(--s-6); }
+.detail-mortgage__headline { font-weight: 300; font-size: var(--fs-40); margin-bottom: var(--s-6); }
 .detail-rent__stats { margin: var(--s-6) 0; }
 
 .detail-record { margin-top: var(--s-8); font-size: var(--fs-13); }
 .detail-record__row { display: grid; grid-template-columns: 1.1fr 1.1fr 1.9fr 0.7fr 0.8fr; gap: var(--s-2); padding: var(--s-2) 0; border-top: 1px solid var(--rule-on-paper); align-items: baseline; }
-.detail-record__head { color: var(--muted-on-paper); border-top: 0; border-bottom: 1px solid var(--rule-on-paper); }
+.detail-record__head { font-size: var(--fs-12); color: var(--muted-on-paper); border-top: 0; border-bottom: 1px solid var(--rule-on-paper); }
 .detail-record .r { text-align: right; }
 .detail-record .nw { white-space: nowrap; }

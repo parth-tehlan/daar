@@ -24,7 +24,7 @@ export function ChoiceRows({ options, selected, onPick, multi, compact, label }:
       role={multi ? 'group' : 'radiogroup'}
       aria-label={label}
     >
-      {options.map((o, i) => {
+      {options.map((o) => {
         const on = selected.includes(o.id);
         return (
           <button
@@ -37,7 +37,7 @@ export function ChoiceRows({ options, selected, onPick, multi, compact, label }:
             onClick={() => onPick(o.id)}
           >
             <span className="ChoiceRows__index">
-              {on ? <span className="ChoiceRows__mark" /> : String(i + 1).padStart(2, '0')}
+              <span className="ChoiceRows__mark" />
             </span>
             <span className="ChoiceRows__label">{o.label}</span>
             <span className="ChoiceRows__desc">{o.desc}</span>

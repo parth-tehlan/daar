@@ -8,10 +8,10 @@ import './steps.css';
 
 const BEDS: Array<{ id: Bedrooms; label: string; cap: string }> = [
   { id: 'studio', label: 'Studio', cap: '≈ 450 sq ft' },
-  { id: '1', label: '1', cap: '≈ 800' },
-  { id: '2', label: '2', cap: '≈ 1,250' },
-  { id: '3', label: '3', cap: '≈ 1,800' },
-  { id: '4+', label: '4+', cap: '≈ 2,600' },
+  { id: '1', label: '1', cap: '≈ 800 sq ft' },
+  { id: '2', label: '2', cap: '≈ 1,250 sq ft' },
+  { id: '3', label: '3', cap: '≈ 1,800 sq ft' },
+  { id: '4+', label: '4+', cap: '≈ 2,600 sq ft' },
 ];
 
 const SQFT = steps(300, [[2000, 100], [5000, 250], [10000, 500]]);

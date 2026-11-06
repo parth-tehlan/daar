@@ -13,7 +13,7 @@ export function Rent({ unit, serviceChargePsf, monthlyMortgage, financing }: Pro
     ? `≈ AED ${int(r.netMonthly)} a month after service charges.`
     : `Rent covers ${Math.round((r.netMonthly / monthlyMortgage) * 100)}% of the mortgage payment.`;
   return (
-    <Section n="06" title="Rent">
+    <Section title="Rent">
       <Segmented label="Letting model" value={mode} onChange={setMode}
         options={[{ value: 'long', text: 'Long let' }, { value: 'holiday', text: 'Holiday home' }]} />
       <div className="detail-rent__stats">

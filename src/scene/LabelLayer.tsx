@@ -9,6 +9,9 @@ export interface LabelSpec {
   y: number;
   z: number;
   text: string;
+  sub?: string;
+  /** single-line label (name only, no second line) */
+  plain?: boolean;
   cls: string;
   /** y is in marker units (scaled with camera distance) */
   marker?: boolean;
@@ -20,7 +23,8 @@ export function LabelLayer({ labels, layerRef }: { labels: LabelSpec[]; layerRef
     <div className="scene-labels" ref={layerRef} aria-hidden="true">
       {labels.map((l) => (
         <div key={l.id} className={l.cls} style={{ visibility: 'hidden' }}>
-          {l.text}
+          {l.cls === 'scene-label' ? <span className="scene-label__name">{l.text}</span> : l.text}
+          {l.sub && <span className="scene-label__sub">{l.sub}</span>}
         </div>
       ))}
     </div>

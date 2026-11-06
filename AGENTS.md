@@ -27,7 +27,7 @@ precisely. Don't invent a different design.
   runtime through `getComputedStyle`).
 - Don't add UI libraries (no Tailwind, MUI, shadcn, framer-motion, chart libs, or icon
   packs). The only allowed runtime deps are react, react-dom, three,
-  @react-three/fiber, @react-three/drei, and the @fontsource packages. Ask before
+  @react-three/fiber and @react-three/drei. Fonts are self-hosted files; don't add font packages. Ask before
   adding anything else.
 - Don't add entrance animations of any kind (see TASTE.md §4). Use `transition` only
   for colour, border-color, background-color, and the progress fill.

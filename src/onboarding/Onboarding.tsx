@@ -41,13 +41,7 @@ export function Onboarding() {
   return (
     <div className="Onboarding">
       <header className="Onboarding__top">
-        <div className="Onboarding__brand">
-          <span className="Onboarding__wordmark display">daar</span>
-          <span className="mono-label Onboarding__tag">Dubai · Off-plan</span>
-        </div>
-        <span className="Onboarding__counter num">
-          {String(step + 1).padStart(2, '0')} / {String(ONBOARDING_STEPS.length).padStart(2, '0')}
-        </span>
+        <span className="wordmark">DAAR</span>
       </header>
 
       <main className={`Onboarding__col${def.wide ? ' Onboarding__col--wide' : ''}`}>
@@ -76,13 +70,12 @@ export function Onboarding() {
           )}
           <div className="Onboarding__right">
             {step !== LAST && (
-              <span className="mono-label Onboarding__count" aria-live="polite">
-                <span className="Onboarding__n num">{n}</span> projects fit so far
+              <span className="Onboarding__count" aria-live="polite">
+                <span className="Onboarding__n num">{n}</span> matching projects
               </span>
             )}
             <button type="button" className="Onboarding__primary" disabled={!valid} onClick={next}>
-              <span>{step === LAST ? `Show ${n} matches →` : 'Continue'}</span>
-              {step !== LAST && <span className="Onboarding__enter">↵</span>}
+              {step === LAST ? `Show ${n} matches →` : 'Continue'}
             </button>
           </div>
         </div>

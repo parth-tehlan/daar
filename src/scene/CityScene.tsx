@@ -69,14 +69,15 @@ function SceneInner(props: SceneProps & { viewRef: React.MutableRefObject<ViewSt
       const { x, z } = project(selected.lat, selected.lon);
       out.push({
         id: 'tower', x, z, y: selected.heightM + LEADER_M, cls: 'scene-label',
-        text: `${selected.name.toUpperCase()} · ${selected.floors} FL · HANDOVER ${selected.handoverPromised.toUpperCase()}`,
+        text: selected.name,
+        sub: `${selected.floors} floors, handover ${selected.handoverPromised}`,
       });
     }
     if (mode === 'results') {
       const p = projects.find((q) => q.id === active);
       if (p) {
         const { x, z } = project(p.lat, p.lon);
-        out.push({ id: 'hover', x, z, y: 150, marker: true, cls: 'scene-label', text: p.name.toUpperCase() });
+        out.push({ id: 'hover', x, z, y: 150, marker: true, cls: 'scene-label', text: p.name, plain: true });
       }
     }
     if (mode === 'onboarding' && step === 5) {

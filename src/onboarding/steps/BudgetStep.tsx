@@ -13,7 +13,7 @@ export function BudgetStep({ answers, patch }: StepProps) {
   return (
     <div className="Step">
       <p className="Step__readout display num">
-        AED {fmtAED(lo)} – {fmtAED(hi)}
+        AED {fmtTick(lo)} – {fmtTick(hi)}
       </p>
       <RangeSlider
         values={VALUES}

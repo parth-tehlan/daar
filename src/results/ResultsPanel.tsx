@@ -83,7 +83,7 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
     body = (
       <div className="ResultsPanel__inner">
         <div className="ResultsPanel__bar">
-          <span className="ResultsPanel__wordmark display">daar</span>
+          <span className="ResultsPanel__wordmark wordmark">daar</span>
           <button
             type="button"
             className="ResultsPanel__edit"
@@ -93,7 +93,7 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
           </button>
         </div>
 
-        <h1 className="ResultsPanel__summary display num">
+        <h1 className="ResultsPanel__summary display">
           {answers.areas.length === 0
             ? `${inventory} projects fit. These ${matches.length} fit best.`
             : primary.length === 0
@@ -105,7 +105,7 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
             <li key={c.label}>
               <button
                 type="button"
-                className="ResultsPanel__chip mono-label"
+                className="ResultsPanel__chip"
                 onClick={() => dispatch({ type: 'goto', view: { kind: 'onboarding', step: c.step } })}
               >
                 {c.label}
@@ -114,7 +114,7 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
           ))}
         </ul>
 
-        <div className="ResultsPanel__sorts mono-label" role="group" aria-label="Sort results">
+        <div className="ResultsPanel__sorts" role="group" aria-label="Sort results">
           {SORTS.map((s) => (
             <button
               key={s.key}
@@ -129,16 +129,16 @@ export function ResultsPanel({ matches }: { matches: Match[] }) {
         </div>
 
         <ul className="ResultsPanel__list">
-          {primary.map((m, i) => (
-            <ResultRow key={m.project.id} match={m} index={i} top={m.project.id === topId} preview={previews.get(m.project.id) ?? ''} />
+          {primary.map((m) => (
+            <ResultRow key={m.project.id} match={m} top={m.project.id === topId} preview={previews.get(m.project.id) ?? ''} />
           ))}
         </ul>
         {outside.length > 0 && (
           <>
-            <div className="ResultsPanel__group mono-label">Outside your areas</div>
+            <div className="ResultsPanel__group">Outside your areas</div>
             <ul className="ResultsPanel__list ResultsPanel__list--outside">
-              {outside.map((m, i) => (
-                <ResultRow key={m.project.id} match={m} index={primary.length + i} top={false} preview={previews.get(m.project.id) ?? ''} />
+              {outside.map((m) => (
+                <ResultRow key={m.project.id} match={m} top={false} preview={previews.get(m.project.id) ?? ''} />
               ))}
             </ul>
           </>

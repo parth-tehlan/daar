@@ -3,7 +3,7 @@ import { Section } from './Parts';
 
 export function Why({ match }: { match: Match }) {
   return (
-    <Section n="01" title="Why it fits">
+    <Section title="Why it fits">
       <ul className="detail-why">
         {match.reasons.map((r, i) => (
           <li className="detail-why__row" key={`${i}-${r.because}`}>
@@ -15,7 +15,7 @@ export function Why({ match }: { match: Match }) {
           <li className="detail-why__row">
             <span className="detail-why__because detail-why__note">
               <span className="detail-why__sq" aria-hidden="true" />
-              <span className="mono-label">Note</span>
+              <span className="label">Note</span>
             </span>
             <span className="detail-why__finding">{match.caveat}</span>
           </li>

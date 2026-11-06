@@ -72,9 +72,8 @@
   left: calc(var(--rs-half) + var(--t) * (100% - var(--rs-thumb)));
   transform: translateX(-50%);
   padding-top: var(--s-2);
-  font-family: var(--font-mono);
   font-size: var(--fs-11);
-  letter-spacing: var(--tracking-label);
+  font-variant-numeric: tabular-nums lining-nums;
   color: var(--muted-on-ink);
   white-space: nowrap;
 }

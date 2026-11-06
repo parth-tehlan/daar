@@ -15,18 +15,17 @@
   color: var(--line-on-ink);
 }
 .ChoiceRows__index {
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
-  letter-spacing: var(--tracking-label);
-  color: var(--muted-on-ink);
   display: flex;
   align-items: center;
+  height: var(--s-6);
 }
 .ChoiceRows__mark {
   width: 10px;
   height: 10px;
-  background: var(--accent);
+  border: var(--hairline) solid var(--muted-on-ink);
+  transition: background-color var(--t-ui), border-color var(--t-ui);
 }
+.ChoiceRows__row.is-on .ChoiceRows__mark { background: var(--accent); border-color: var(--accent); }
 .ChoiceRows__label {
   font-size: var(--fs-22);
   line-height: var(--lh-snug);
@@ -56,7 +55,7 @@
   min-height: 0;
   padding: var(--s-3) 0;
 }
-.ChoiceRows--compact .ChoiceRows__index { padding-top: var(--s-1); height: var(--s-6); }
+.ChoiceRows--compact .ChoiceRows__index { height: var(--s-6); }
 .ChoiceRows--compact .ChoiceRows__label { font-size: var(--fs-17); }
 .ChoiceRows--compact .ChoiceRows__desc {
   grid-column: 2;

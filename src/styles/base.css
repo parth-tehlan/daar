@@ -1,9 +1,11 @@
 /* Lead-owned. Reset, fonts, globals. */
-@import "@fontsource-variable/newsreader/opsz.css";
-@import "@fontsource/host-grotesk/400.css";
-@import "@fontsource/host-grotesk/500.css";
-@import "@fontsource/fragment-mono/400.css";
 @import "./tokens.css";
+
+/* Zodiak + Switzer by Indian Type Foundry (Fontshare), ITF Free Font License. */
+@font-face { font-family: "Zodiak"; src: url("../assets/fonts/Zodiak-300.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "Zodiak"; src: url("../assets/fonts/Zodiak-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Switzer"; src: url("../assets/fonts/Switzer-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Switzer"; src: url("../assets/fonts/Switzer-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
 
 *,
 *::before,
@@ -28,6 +30,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "kern";
+  /* Switzer sets tight at small sizes; a hair of tracking keeps 12–15px airy. */
+  letter-spacing: 0.006em;
   overflow: hidden;
 }
 
@@ -66,19 +70,29 @@ button {
 }
 
 /* Shared utility classes */
+
+/* Sentence-case label. Replaces the banned .mono-label (TASTE.md §2). */
+.label,
 .mono-label {
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
+  font-family: var(--font-ui);
+  font-size: var(--fs-12);
   letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  text-transform: none;
   line-height: var(--lh-snug);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-15);
+  letter-spacing: var(--tracking-wordmark);
+  text-transform: uppercase;
 }
 
 .display {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: var(--display-weight);
   font-style: normal;
-  font-optical-sizing: auto;
   letter-spacing: var(--tracking-display);
   line-height: var(--lh-tight);
 }

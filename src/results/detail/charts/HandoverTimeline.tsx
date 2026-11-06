@@ -34,7 +34,7 @@ export function HandoverTimeline({ t, builtPct }: { t: HandoverTiming; builtPct:
         {tick(xt, 'Today', monthLabel(t.todayIdx))}
         {tick(xp, 'Promised', t.promisedLabel)}
         <rect x={xe - 4} y={BASE - 4} width={8} height={8} fill="var(--accent)" />
-        <text className="t-accent" x={xe} y={BASE - 14} textAnchor={anchor(xe, w)}>Estimate {t.estLabel}</text>
+        <text className="t-accent t-est" x={xe} y={BASE - 14} textAnchor={anchor(xe, w)}>Estimate {t.estLabel}</text>
       </svg>
     </div>
   );

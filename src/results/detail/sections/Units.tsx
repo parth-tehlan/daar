@@ -6,10 +6,10 @@ interface Props { units: UnitType[]; selected: number; onSelect: (i: number) => 
 
 export function Units({ units, selected, onSelect }: Props) {
   return (
-    <Section n="02" title="Units">
+    <Section title="Units">
       <div className="detail-units" role="radiogroup" aria-label="Unit type used in the calculators">
-        <div className="detail-units__row detail-units__head mono-label" aria-hidden="true">
-          <span>Type</span><span>Size</span><span>Price</span><span>AED / sq ft</span>
+        <div className="detail-units__row detail-units__head label" aria-hidden="true">
+          <span>Type</span><span>Size</span><span>Price</span><span>AED per sq ft</span>
         </div>
         {units.map((u, i) => (
           <button key={`${i}-${u.kind}-${u.sqft}`} type="button" role="radio" aria-checked={i === selected}

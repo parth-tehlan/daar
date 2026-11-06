@@ -1,27 +1,24 @@
 import type { ReactNode } from 'react';
 
-export function Section({ n, title, children }: { n: string; title: string; children: ReactNode }) {
+export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="detail-section" aria-label={title}>
-      <h2 className="detail-section__label mono-label">
-        <span className="detail-section__n">{n}</span>
-        <span>{title}</span>
-      </h2>
+      <h2 className="detail-section__label">{title}</h2>
       <div className="detail-section__body">{children}</div>
     </section>
   );
 }
 
-export interface StatItem { label: string; value: ReactNode; unit?: string; accent?: boolean }
+export interface StatItem { label: string; value: ReactNode; unit?: string; prefix?: string; accent?: boolean }
 
 export function StatRow({ items, size = 'ui' }: { items: StatItem[]; size?: 'ui' | 'display' }) {
   return (
     <dl className={`detail-stats detail-stats--${size}`} style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
       {items.map((s) => (
         <div className="detail-stat" key={s.label}>
-          <dt className="mono-label detail-stat__label">{s.label}</dt>
+          <dt className="label detail-stat__label">{s.label}</dt>
           <dd className={`detail-stat__value num${s.accent ? ' detail-stat__value--accent' : ''}`}>
-            {s.value}
+            {s.prefix ? <span className="detail-stat__unit">{s.prefix} </span> : null}{s.value}
             {s.unit ? <span className="detail-stat__unit"> {s.unit}</span> : null}
           </dd>
         </div>
@@ -37,7 +34,7 @@ export function Segmented<T extends string | number>(props: {
     <div className="detail-seg" role="radiogroup" aria-label={props.label}>
       {props.options.map((o) => (
         <button key={String(o.value)} type="button" role="radio" aria-checked={o.value === props.value}
-          className="detail-seg__btn mono-label" onClick={() => props.onChange(o.value)}>
+          className="detail-seg__btn label" onClick={() => props.onChange(o.value)}>
           {o.text}
         </button>
       ))}
@@ -53,7 +50,7 @@ export function Slider(props: {
     <label className="detail-slider">
       <span className="detail-slider__head">
         <span className="detail-slider__name">{props.label}</span>
-        <span className="detail-slider__value mono-label num">{props.display}</span>
+        <span className="detail-slider__value label num">{props.display}</span>
       </span>
       <span className="detail-slider__rail" style={{ ['--p' as string]: p }}>
         <span className="detail-slider__track" />

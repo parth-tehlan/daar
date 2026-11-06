@@ -8,7 +8,7 @@ export function Payment({ plan, price }: { plan: PaymentMilestone[]; price: numb
   let before = 0;
   for (const m of plan) { before += m.pct; if (isOnHandover(m)) break; }
   return (
-    <Section n="04" title="Payment plan">
+    <Section title="Payment plan">
       <p className="detail-note">
         {post > 0
           ? `${post}% of the price is paid after handover, ${aedFull((price * post) / 100)} in all.`
@@ -21,7 +21,7 @@ export function Payment({ plan, price }: { plan: PaymentMilestone[]; price: numb
         ))}
       </div>
       {post > 0 ? (
-        <div className="detail-plan__mark mono-label" style={{ left: `${before}%` }}>↑ Handover</div>
+        <div className="detail-plan__mark label" style={{ left: `${before}%` }}><span className="detail-plan__tick" />Handover</div>
       ) : null}
       </div>
       <ul className="detail-plan__rows">

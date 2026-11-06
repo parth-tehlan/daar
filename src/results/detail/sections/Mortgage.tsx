@@ -10,8 +10,8 @@ interface Props {
 
 export function Mortgage({ state, onChange, summary, financing }: Props) {
   return (
-    <Section n="05" title="Mortgage">
-      {financing === 'cash' ? <p className="detail-note detail-note--mono mono-label">You chose cash. Shown for comparison.</p> : null}
+    <Section title="Mortgage">
+      {financing === 'cash' ? <p className="detail-note detail-note--quiet">You chose cash. Shown for comparison.</p> : null}
       <p className="detail-note">Mortgages start at handover. Construction instalments are paid in cash.</p>
       <Slider label="Down payment" min={20} max={80} step={1} value={state.dp} display={`${state.dp}%`}
         onChange={(dp) => onChange({ ...state, dp })} />
@@ -20,7 +20,7 @@ export function Mortgage({ state, onChange, summary, financing }: Props) {
       <div className="detail-term">
         <span className="detail-slider__name">Term</span>
         <Segmented label="Term in years" value={state.term} onChange={(term) => onChange({ ...state, term })}
-          options={[15, 20, 25].map((y) => ({ value: y, text: `${y} yrs` }))} />
+          options={[15, 20, 25].map((y) => ({ value: y, text: `${y} years` }))} />
       </div>
       <p className="detail-mortgage__headline display num">≈ AED {int(summary.monthly)} / mo</p>
       <StatRow items={[

@@ -7,10 +7,10 @@ export function DelayStrip({ projects }: { projects: PastProject[] }) {
   return (
     <div className="detail-strip">
       <div className="detail-strip__row detail-strip__head">
-        <span className="mono-label detail-strip__cap">Delay, months</span>
+        <span className="label detail-strip__cap">Delay in months</span>
         <span className="detail-strip__scale">
           {TICKS.map((t) => (
-            <span key={t} className="mono-label detail-strip__tick-label num" style={{ left: `${(t / 24) * 100}%` }}>{t}</span>
+            <span key={t} className="label detail-strip__tick-label num" style={{ left: `${(t / 24) * 100}%` }}>{t}</span>
           ))}
         </span>
       </div>

@@ -17,14 +17,6 @@
   justify-content: space-between;
   align-items: baseline;
 }
-.Onboarding__brand { display: flex; align-items: baseline; gap: var(--s-6); }
-.Onboarding__wordmark { font-size: var(--fs-22); letter-spacing: 0; line-height: 1; }
-.Onboarding__tag { color: var(--muted-on-ink); }
-.Onboarding__counter {
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
-  letter-spacing: var(--tracking-label);
-}
 
 .Onboarding__col {
   position: absolute;
@@ -33,7 +25,7 @@
   width: min(640px, calc(100vw - 2 * var(--onb-pad)));
 }
 .Onboarding__col--wide { width: min(760px, calc(100vw - 2 * var(--onb-pad))); }
-.Onboarding__title { font-size: var(--fs-40); }
+.Onboarding__title { font-size: var(--fs-56); line-height: 1; }
 .Onboarding__helper {
   margin-top: var(--s-3);
   max-width: 46ch;
@@ -68,13 +60,13 @@
   margin-top: var(--s-4);
 }
 .Onboarding__right { display: flex; align-items: center; gap: var(--s-6); }
-.Onboarding__count { color: var(--muted-on-ink); }
+.Onboarding__count { font-size: var(--fs-13); color: var(--muted-on-ink); }
 .Onboarding__n { color: var(--line-on-ink); }
 
 .Onboarding__back {
   min-height: var(--target);
   padding: 0 var(--s-2) 0 0;
-  font-size: var(--fs-15);
+  font-size: var(--fs-13);
   color: var(--muted-on-ink);
   transition: color var(--t-ui);
 }
@@ -101,4 +93,3 @@
   color: var(--muted-on-ink);
   cursor: not-allowed;
 }
-.Onboarding__enter { font-family: var(--font-mono); font-size: var(--fs-13); font-weight: 400; }

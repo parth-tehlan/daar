@@ -22,8 +22,8 @@ The audience is a business stakeholder, so polish and taste matter more than fea
 
 ## Stack
 Vite + React 19 + TypeScript, three.js through @react-three/fiber (+ drei helpers),
-plain CSS with design tokens, and @fontsource for Newsreader, Host Grotesk and
-Fragment Mono. No UI or chart libraries.
+plain CSS with design tokens, and self-hosted Zodiak + Switzer (Fontshare, ITF free
+licence) in `src/assets/fonts/`. No UI or chart libraries, and no monospace.
 
 ## Commands
 - `npm run dev -- --port 5173 --strictPort`

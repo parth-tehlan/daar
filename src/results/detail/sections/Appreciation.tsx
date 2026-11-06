@@ -12,15 +12,15 @@ export function Appreciation({ price, t, developer }: Props) {
   const today = idxToYear(TODAY_IDX);
   const since = Math.min(...developer.pastProjects.map((p) => p.launchYear));
   return (
-    <Section n="07" title="Appreciation">
+    <Section title="Appreciation">
       <p className="detail-note">
         {developer.name} has delivered {developer.deliveredCount} projects. Those launched since {since} gained {g.toFixed(1)}% a year on average; the {developer.pastProjects.length} most recent are below.
       </p>
       <AppreciationChart price={price} growthPct={g} todayYear={today} handoverYear={idxToYear(t.estIdx)} />
       <p className="detail-small">The shaded range is the average gain ± 3 points a year. It is a spread of past outcomes, not a forecast.</p>
       <div className="detail-record num" role="table" aria-label="Developer record">
-        <div className="detail-record__row detail-record__head mono-label" role="row">
-          <span>Project</span><span>District</span><span className="r nw">AED/sq ft, launch → now</span><span className="r">Per year</span><span className="r">Delay</span>
+        <div className="detail-record__row detail-record__head label" role="row">
+          <span>Project</span><span>District</span><span className="r nw">AED per sq ft, launch → now</span><span className="r">Per year</span><span className="r">Delay</span>
         </div>
         {developer.pastProjects.map((p, i) => (
           <div className="detail-record__row" role="row" key={`${i}-${p.name}`}>

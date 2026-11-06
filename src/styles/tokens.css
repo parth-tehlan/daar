@@ -58,9 +58,12 @@
 
 :root {
   /* Type families */
-  --font-display: "Newsreader Variable", "Newsreader", Georgia, serif;
-  --font-ui: "Host Grotesk", system-ui, sans-serif;
-  --font-mono: "Fragment Mono", ui-monospace, monospace;
+  --font-display: "Zodiak", "Times New Roman", serif;
+  --font-ui: "Switzer", "Helvetica Neue", Arial, sans-serif;
+  /* Deprecated: monospace is banned (TASTE.md §2). Aliased to the UI face so any
+     leftover usage degrades to Switzer instead of a monospace font. Remove all uses. */
+  --font-mono: var(--font-ui);
+  --display-weight: 300;
 
   /* Type scale — the only sizes allowed */
   --fs-11: 11px;
@@ -78,7 +81,8 @@
   --lh-body: 1.5;
 
   --tracking-display: -0.015em;
-  --tracking-label: 0.04em;
+  --tracking-label: 0.014em;
+  --tracking-wordmark: 0.34em;
 
   /* Spacing — 4px base */
   --s-1: 4px;

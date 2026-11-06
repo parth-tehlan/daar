@@ -8,10 +8,10 @@ export function Handover({ t, project, developer }: { t: HandoverTiming; project
   const n = developer.pastProjects.length;
   const months = Math.round(developer.avgDelayMonths);
   const sentence = months > 0
-    ? `${developer.name} has delivered ${developer.deliveredCount} projects. The ${n} most recent ran ${months} months late on average, so plan for ${t.estLabel}.`
+    ? `${developer.name} has delivered ${developer.deliveredCount} projects. The ${n} most recent ran ${months} ${months === 1 ? 'month' : 'months'} late on average, so plan for ${t.estLabel}.`
     : `${developer.name} has delivered ${developer.deliveredCount} projects. The ${n} most recent arrived on time, so ${t.promisedLabel} looks realistic.`;
   return (
-    <Section n="03" title="Handover">
+    <Section title="Handover">
       <StatRow size="display" items={[
         { label: 'Promised', value: t.promisedLabel },
         { label: 'Our estimate', value: t.estLabel },

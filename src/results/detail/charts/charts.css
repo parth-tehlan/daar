@@ -2,11 +2,11 @@
 
 .detail-strip { margin-top: var(--s-4); }
 .detail-strip__row { display: grid; grid-template-columns: 40% 1fr; gap: var(--s-4); align-items: center; min-height: 28px; }
-.detail-strip__cap { color: var(--muted-on-paper); }
+.detail-strip__cap { font-size: var(--fs-12); color: var(--muted-on-paper); }
 .detail-strip__name { font-size: var(--fs-13); }
 .detail-strip__scale { position: relative; display: block; height: 28px; margin: 0 6px; }
 .detail-strip__head .detail-strip__scale { height: 20px; }
-.detail-strip__tick-label { position: absolute; top: 0; transform: translateX(-50%); color: var(--muted-on-paper); }
+.detail-strip__tick-label { font-size: var(--fs-11); position: absolute; top: 0; transform: translateX(-50%); color: var(--muted-on-paper); }
 .detail-strip__axis { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--rule-on-paper-strong); }
 .detail-strip__tick { position: absolute; top: calc(50% - 3px); height: 7px; width: 1px; background: var(--rule-on-paper-strong); }
 .detail-strip__dot { position: absolute; top: calc(50% - 4px); width: 8px; height: 8px; margin-left: -4px; background: var(--ink); }

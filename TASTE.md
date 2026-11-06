@@ -63,37 +63,41 @@ muted-on-ink `#a9b6b9`.
 
 ## 2. Type
 
-| role     | family          | notes |
-|----------|-----------------|-------|
-| Display  | **Newsreader** (variable, opsz) | Roman only. **Italics are never allowed.** Weight 400. Use it only for: onboarding question text, property names in the detail header, the wordmark, and one big headline figure per section. |
-| UI/body  | **Host Grotesk** | 400 and 500 only. No 600/700. |
-| Data     | **Fragment Mono** | labels, figures in tables, step counters, coordinates, units |
+The register is high-ticket real estate and hospitality, not a tech product. The reference sites are Omniyat (Optima + Graphik), Aman (Lyon Display + Whitney), Sotheby's Realty (Freight Big / Mercury + Benton Sans) and Aesop (Suisse Int'l). They pair a refined display serif with a quiet neutral sans, and none of them use monospace.
 
-Fonts are self-hosted through `@fontsource` / `@fontsource-variable`.
+| role     | family | notes |
+|----------|--------|-------|
+| Display  | **Zodiak** (Fontshare, ITF free licence) | Weight **300** for display and big figures, and 400 for small serif headings (≤ 22px). Roman only. **Italics are never allowed.** |
+| UI/body  | **Switzer** (Fontshare, ITF free licence) | 400 and 500 only. Used for everything that isn't display, including labels, tables and chart ticks. |
+
+Fonts are self-hosted from `src/assets/fonts/` and declared in `base.css`.
 
 ### Scale (px). Use only these sizes.
 `11 · 12 · 13 · 15 · 17 · 22 · 28 · 40 · 56`
 
-- Body: Host Grotesk 15/1.5. Secondary: 13/1.45.
-- Labels: Fragment Mono 11, `letter-spacing: .04em`, **uppercase allowed only in mono
-  labels**, and colour `--muted-*`.
-- Display: Newsreader 40/1.05 or 56/1.0, `letter-spacing: -0.015em`, weight 400,
-  `font-optical-sizing: auto`.
-- Figures: `font-variant-numeric: tabular-nums` wherever numbers line up.
-- Headings must not be bigger than they need to be. The biggest text on any screen is
-  56px, and only in onboarding.
-- No text gradients, no mixed italic emphasis words ("Find your *dream* home"), and no
-  emoji.
+- Body: Switzer 15/1.5. Secondary: 13/1.45.
+- **Labels** (the `.label` class): Switzer 12 or 13, **sentence case**, colour `--muted-*`, `letter-spacing: 0.01em`. Example: "Handover", "From", "Why it fits".
+- **Banned label styles.** These are the strongest AI-template tells, so don't use them anywhere:
+  - monospace text
+  - UPPERCASE with wide letter-spacing
+  - zero-padded indices (`01`, `02`)
+  - step counters like `03 / 07`
+  - meta strings in caps joined with `·`, like `DUBAI · OFF-PLAN`
+  - status-tag pills in caps
+- The **only** uppercase allowed is the `DAAR` wordmark (Zodiak 400, `letter-spacing: 0.34em`). The wordmark stands alone, with no tagline next to it.
+- Display: Zodiak 300, 40/1.05 or 56/1.0, `letter-spacing: -0.015em`.
+- Big figures (prices, monthly payment, handover quarter, fit score): Zodiak 300 at 22, 28 or 40.
+- Small serif headings (section titles such as "Why it fits", "Outside your areas"): Zodiak 400, 22px, without numbering.
+- Table and inline figures: Switzer with `font-variant-numeric: tabular-nums lining-nums`.
+- Headings must not be bigger than they need to be. The biggest text on any screen is 56px, and only in onboarding.
+- No text gradients, no mixed italic emphasis words ("Find your *dream* home"), and no emoji.
 
 ### Copy voice
-Plain and specific, like a good broker's note. Sentence case everywhere except mono
-labels.
-- Good: "Handover is promised for Q3 2028. This developer's last six towers were
-  delivered 4 months late on average, so plan for Q1 2029."
+Plain and specific, like a good broker's note. Use **sentence case everywhere** (the wordmark is the only exception).
+- Good: "Handover is promised for Q3 2028. This developer's last six towers were delivered 4 months late on average, so plan for Q1 2029."
 - Bad: "Unlock your dream investment ✨", "Seamless", "Elevate", "Discover", "Journey".
 - Numbers come with units and an estimate marker: "≈ AED 9,840 / mo".
-- All figures are placeholders, but they must be internally consistent and plausible
-  for Dubai (AED, sq ft, Q-quarters).
+- All figures are placeholders, but they must be internally consistent and plausible for Dubai (AED, sq ft, Q-quarters).
 
 ---
 
@@ -113,10 +117,7 @@ labels.
 ### Screens
 1. **Onboarding (full-bleed ink).** The wireframe city drifts behind at reduced line
    opacity. Show one question at a time, left-aligned, at about 1/3 of the width from
-   the left edge. Top-left has the wordmark. Top-right has the step counter `03 / 07`
-   in mono. Bottom has a segmented progress rule (7 hairline segments; completed ones
-   are line-on-ink at full opacity), plus "Back" and "Continue ↵". A live count
-   "214 projects fit so far" updates as the user answers.
+   the left edge. Top-left has the wordmark and nothing else is up there. Bottom has a segmented progress rule (7 hairline segments; completed ones are line-on-ink at full opacity), plus "Back" and "Continue". There is no numeric step counter. A live count ("214 matching projects", Switzer 13, sentence case) sits beside the Continue button and updates as the user answers.
 2. **Results (split).** On the left is the paper panel with a list of matches as rows.
    On the right is the city with markers. Hovering a row highlights its marker, and the
    reverse works too.
@@ -163,34 +164,28 @@ labels.
   one continuous line at about 60%. No filled water and no ground texture.
 - **The off-plan project** is a synthesised massing (it doesn't exist yet), drawn in
   `--accent` with **dashed** edges. A thin vertical leader rises from its roof to a DOM
-  label in the overlay: Fragment Mono 11, for example
-  `PROJECT · 46 FL · HANDOVER Q3 2028`.
+  label in the overlay with two lines: the project name in Zodiak 400 15, then "46 floors, handover Q3 2028" in Switzer 12 muted.
 - Result markers on the overview: a small accent square on the ground with a hairline
   vertical stem. No pins, no bouncing, no pulsing.
 - No bloom, no post-processing, no sky, no lights (none are needed for lines).
-- A tiny compass and scale bar sit in the corner in mono (`N ↑`, `— 500 m`). This
-  detail sells it.
+- A tiny north arrow and scale bar sit in the corner in Switzer 12 ("N", "500 m"). Don't show coordinate readouts, which look techy rather than luxury.
 
 ---
 
 ## 6. Components
 
-- **Choice rows** (onboarding): full-width rows separated by hairlines, with a mono
-  index (`01`) on the left, the label at 22px Host Grotesk, and a description at 13px
-  muted. Selected: the index becomes a filled accent square and the label goes to 500.
-  No checkmark icons in circles.
+- **Choice rows** (onboarding): full-width rows separated by hairlines. Each row has a 10px square marker on the left (1px muted outline; filled `--accent` when selected), the label in Switzer 22, and the description below in 13 muted. There are no indices and no checkmark icons in circles.
 - **Sliders**: a 1px track, a 2px filled portion in line colour, and a 14px square thumb
-  in accent. Show the value above the thumb in mono. The budget slider has a hairline
+  in accent. Show the value above the thumb in Switzer 13 tabular. The budget slider has a hairline
   histogram of inventory above the track.
 - **Buttons**: the primary is a solid ink rectangle with paper text (or the reverse on
-  ink), 44px tall, 0 radius, label at 15/500 with `↵` or `→` in mono. The secondary is
+  ink), 44px tall, 0 radius, label in Switzer 15/500, optionally ending in `→`. The secondary is
   a text button with an underline on hover. Only one primary per view.
-- **Charts**: hand-built SVG. Hairline axes and mono tick labels, with no gridlines
+- **Charts**: hand-built SVG. Hairline axes and Switzer 11 tick labels, with no gridlines
   except a baseline. The projection range is a flat `--paper-2` area with an ink
   median line. No chart libraries.
-- **Stat blocks**: a mono label above a figure (Newsreader 28 or Host 22), separated by
-  vertical hairlines in a row.
-- **Icons**: avoid them. Where one is unavoidable, use a text glyph (← → ↑ ↵ × +) in mono.
+- **Stat blocks**: a sentence-case label (Switzer 12 muted) above a figure (Zodiak 300, 28), separated by vertical hairlines in a row.
+- **Icons**: avoid them. Where one is unavoidable, use a text glyph (← → ↑ × +) in the running font.
 
 ---
 
@@ -203,4 +198,6 @@ labels.
    Remove it.
 4. Look for any italic text. Remove it.
 5. Count the uses of the accent in the view. If there are more than 2 or 3, cut them.
-6. Every number needs a unit and must be tabular. Every label should be mono.
+6. Every number needs a unit and must be tabular.
+7. Search for `font-mono`, `text-transform: uppercase`, `letter-spacing` above 0.02em, and zero-padded numbers. The only allowed hit is the wordmark.
+8. Would this look at home on Aman's or Omniyat's website? If it looks like a developer tool, it fails.

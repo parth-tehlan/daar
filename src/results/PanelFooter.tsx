@@ -7,9 +7,9 @@ export function PanelFooter() {
   const { state, dispatch } = useStore();
   return (
     <footer className="ResultsPanel__footer">
-      <span className="mono-label ResultsPanel__muted">Placeholder data · UI mockup</span>
-      <span className="ResultsPanel__plates mono-label">
-        <span className="ResultsPanel__muted">Plate</span>
+      <span className="ResultsPanel__muted">Placeholder data</span>
+      <span className="ResultsPanel__plates">
+        <span className="ResultsPanel__muted">Colour plate</span>
         {PLATES.map((p) => (
           <button
             key={p}

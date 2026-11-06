@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { MutableRefObject } from 'react';
-import { WORLD_ORIGIN } from '../types';
 import type { ViewState } from './shots';
 
-const R = 6_371_000;
 const RAD = Math.PI / 180;
 const NICE = [50, 100, 200, 500, 1000, 2000, 5000, 10000];
 
@@ -11,7 +9,6 @@ export function SceneOverlay({ viewRef }: { viewRef: MutableRefObject<ViewState>
   const arrow = useRef<SVGSVGElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
   const barLabel = useRef<HTMLSpanElement>(null);
-  const coords = useRef<HTMLSpanElement>(null);
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,15 +21,12 @@ export function SceneOverlay({ viewRef }: { viewRef: MutableRefObject<ViewState>
       const ppm = h / (2 * v.dist * Math.tan(15 * RAD)); // px per metre at the target
       let m = NICE[0];
       for (const n of NICE) { if (n * ppm <= 140) m = n; }
-      const key = `${v.az.toFixed(1)}|${(m * ppm).toFixed(0)}|${v.tx.toFixed(0)}|${v.tz.toFixed(0)}`;
+      const key = `${v.az.toFixed(1)}|${(m * ppm).toFixed(0)}`;
       if (key === last) return;
       last = key;
-      const lat = WORLD_ORIGIN.lat - v.tz / (R * RAD);
-      const lon = WORLD_ORIGIN.lon + v.tx / (R * RAD * Math.cos(WORLD_ORIGIN.lat * RAD));
       if (arrow.current) arrow.current.style.transform = `rotate(${v.az.toFixed(1)}deg)`;
       if (bar.current) bar.current.style.width = `${Math.round(m * ppm)}px`;
       if (barLabel.current) barLabel.current.textContent = m >= 1000 ? `${m / 1000} km` : `${m} m`;
-      if (coords.current) coords.current.textContent = `${lat.toFixed(4)}° N  ${lon.toFixed(4)}° E`;
     };
     tick();
     return () => cancelAnimationFrame(raf);
@@ -51,7 +45,6 @@ export function SceneOverlay({ viewRef }: { viewRef: MutableRefObject<ViewState>
         <span className="scene-furniture__bar" ref={bar} />
         <span ref={barLabel} />
       </span>
-      <span ref={coords} />
     </div>
   );
 }

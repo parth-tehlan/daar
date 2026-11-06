@@ -179,10 +179,14 @@ function scoreProject(p: Project, a: Answers): Match {
     const estQ = quarterLabel(est);
     const short = dev.name.replace(/ (Developments|Properties|Estates|Real Estate|& Partners)$/, '');
     const margin = Math.round((a.handoverBy - est) * 4);
-    const finding =
-      estQ === p.handoverPromised
-        ? `Promised ${p.handoverPromised}. ${short}'s ${delay}-month average slip keeps it inside that quarter, ${margin >= 2 ? 'well within' : margin >= 0 ? 'inside' : 'but still past'} your ${quarterLabel(a.handoverBy)} window.`
-        : `Promised ${p.handoverPromised}. ${short}'s ${delay}-month average slip puts it in ${estQ}${margin >= 0 ? `, inside your ${quarterLabel(a.handoverBy)} window.` : `, past your ${quarterLabel(a.handoverBy)} window.`}`;
+    const nQ = (n: number) => ['a', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'][n - 1] ?? String(n);
+    const plan =
+      margin < 0
+        ? `With ${short} averaging a ${delay}-month slip, plan for ${estQ}, ${nQ(-margin)} ${-margin === 1 ? 'quarter' : 'quarters'} past your ${quarterLabel(a.handoverBy)} window.`
+        : margin === 0
+          ? `With ${short} averaging a ${delay}-month slip, plan for ${estQ}, right at the edge of your window.`
+          : `With ${short} averaging a ${delay}-month slip, plan for ${estQ}, ${nQ(margin)} ${margin === 1 ? 'quarter' : 'quarters'} inside your window.`;
+    const finding = `Promised ${p.handoverPromised}. ${estQ === p.handoverPromised ? plan.replace(/plan for \S+ \d{4}/, 'it stays in that quarter') : plan}`;
     reasons.push({ because: `You want keys by ${quarterLabel(a.handoverBy)}`, finding });
   }
   if (reasons.length < 4 && unit.priceAED < a.budget[0]) {
