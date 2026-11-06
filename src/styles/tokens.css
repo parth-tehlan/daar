@@ -1,0 +1,108 @@
+/* Daar design tokens. Lead-owned. See TASTE.md.
+   Colours are taken from Sanzo Wada, "A Dictionary of Color Combinations". */
+
+:root,
+:root[data-plate="166"] {
+  /* Plate 166 — Deep Slate Green · Naples Yellow · Grenadine Pink */
+  --ink: #112f2c;
+  --ink-2: #183c38;
+  --paper: #faf3dc;
+  --paper-2: #f3e6bc;
+  --naples: #fbe6a0;
+  --accent: #f48067;
+  --accent-ink: #b9472f;
+  --line-on-ink: #fdf3d6;
+  --muted-on-paper: #5f6f66;
+  --muted-on-ink: #8fa39b;
+  --rule-on-paper: rgba(17, 47, 44, 0.14);
+  --rule-on-paper-strong: rgba(17, 47, 44, 0.32);
+  --rule-on-ink: rgba(253, 243, 214, 0.14);
+  --rule-on-ink-strong: rgba(253, 243, 214, 0.34);
+}
+
+:root[data-plate="303"] {
+  /* Plate 303 — Deep Slate Olive · Naples Yellow · Peach Red · Neutral Gray */
+  --ink: #253122;
+  --ink-2: #2e3c2a;
+  --paper: #f9f2dc;
+  --paper-2: #f1e4b8;
+  --naples: #fbe6a0;
+  --accent: #f15a30;
+  --accent-ink: #b23d1a;
+  --line-on-ink: #f6efd8;
+  --muted-on-paper: #5f6658;
+  --muted-on-ink: #b6bfc1;
+  --rule-on-paper: rgba(37, 49, 34, 0.14);
+  --rule-on-paper-strong: rgba(37, 49, 34, 0.32);
+  --rule-on-ink: rgba(246, 239, 216, 0.14);
+  --rule-on-ink-strong: rgba(246, 239, 216, 0.34);
+}
+
+:root[data-plate="296"] {
+  /* Plate 296 — Slate Color · Sulpher Yellow · Ochraceous Salmon · Pale Raw Umber */
+  --ink: #34454c;
+  --ink-2: #3d5058;
+  --paper: #f8f2d6;
+  --paper-2: #f5ecc2;
+  --naples: #f5ecc2;
+  --accent: #d8a37b;
+  --accent-ink: #71502f;
+  --line-on-ink: #f5ecc2;
+  --muted-on-paper: #6b6a5c;
+  --muted-on-ink: #a9b6b9;
+  --rule-on-paper: rgba(52, 69, 76, 0.16);
+  --rule-on-paper-strong: rgba(52, 69, 76, 0.34);
+  --rule-on-ink: rgba(245, 236, 194, 0.16);
+  --rule-on-ink-strong: rgba(245, 236, 194, 0.36);
+}
+
+:root {
+  /* Type families */
+  --font-display: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --font-ui: "Host Grotesk", system-ui, sans-serif;
+  --font-mono: "Fragment Mono", ui-monospace, monospace;
+
+  /* Type scale — the only sizes allowed */
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-15: 15px;
+  --fs-17: 17px;
+  --fs-22: 22px;
+  --fs-28: 28px;
+  --fs-40: 40px;
+  --fs-56: 56px;
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.25;
+  --lh-body: 1.5;
+
+  --tracking-display: -0.015em;
+  --tracking-label: 0.04em;
+
+  /* Spacing — 4px base */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-24: 96px;
+
+  /* Geometry */
+  --radius-input: 2px;
+  --radius-chip: 999px;
+  --hairline: 1px;
+  --target: 44px;
+
+  /* Layout */
+  --panel-w: clamp(520px, 44vw, 720px);
+  --content-w: 560px;
+
+  /* Motion — functional only (TASTE.md §4) */
+  --t-ui: 120ms ease-out;
+  --t-progress: 240ms ease-out;
+  --camera-fly-ms: 1400;
+}
